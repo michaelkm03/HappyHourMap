@@ -1,15 +1,152 @@
-body {
-  margin: 0;
-  font-family: system-ui, sans-serif;
+/* --- GLOBAL LAYOUT STYLES --- */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Arial, sans-serif;
+    overflow: hidden; /* Prevent body scroll */
 }
 
 h1 {
-  text-align: center;
-  margin: 10px 0;
+    margin: 0;
+    padding: 10px 15px;
+    font-size: 1.5em;
+    background: #FF0040; /* Eater color */
+    color: white;
+}
+
+.map-container {
+    display: flex; /* Use flexbox for map and list side-by-side */
+    height: calc(100vh - 50px); /* Adjust height based on h1 height (50px assumed) */
 }
 
 #map {
-  width: 100%;
-  height: 90vh;
-  border-top: 2px solid #444;
+    flex-grow: 1; /* Map takes up all available space */
+    height: 100%;
+}
+
+/* --- SIDEBAR LISTINGS STYLES --- */
+#listings {
+    width: 350px; /* Sidebar width */
+    height: 100%;
+    overflow-y: scroll; /* Enable scrolling for the list */
+    padding: 15px;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    background: #f8f8f8; /* Light background for the sidebar */
+}
+
+#listings h2 {
+    margin: 0 0 15px 0;
+    font-size: 1.2em;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 5px;
+}
+
+#restaurant-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.listing-item {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-left: 5px solid transparent; /* Used for active highlight */
+    cursor: pointer;
+    background: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s, border-left-color 0.2s;
+}
+
+.listing-item:hover {
+    background-color: #f0f0f0;
+}
+
+.listing-item.active {
+    border-left-color: #FF0040; /* Highlight color */
+    background-color: #fffaf0; /* Slightly different background for active */
+}
+
+
+/* --- CUSTOM MARKER ICON STYLES (Eater Style) --- */
+.eater-marker {
+    background-color: #FF0040; /* Eater's signature color */
+    color: white;
+    width: 30px;
+    height: 30px;
+    line-height: 30px; /* Center text vertically */
+    text-align: center;
+    border-radius: 50%; /* Makes it circular */
+    font-weight: bold;
+    font-size: 14px;
+    border: 2px solid white; /* White halo for visibility */
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+
+/* --- POPUP STYLES (Retained from previous step) --- */
+
+.leaflet-popup-content-wrapper {
+    background: #222; 
+    color: #fff;      
+    border-radius: 8px;
+    padding: 0; 
+}
+
+.leaflet-popup-tip {
+    background: #222;
+}
+
+.custom-popup-content {
+    padding: 10px 15px;
+    font-family: 'Arial', sans-serif;
+    max-width: 300px; 
+}
+
+.popup-title {
+    margin: 0 0 5px 0;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.popup-address {
+    margin: 0 0 10px 0;
+    font-size: 0.9em;
+    opacity: 0.8;
+}
+
+.popup-divider {
+    border: 0;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.2);
+    margin: 10px 0;
+}
+
+.popup-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9em;
+}
+
+.popup-table td {
+    padding: 3px 0;
+    vertical-align: top;
+    border: none;
+}
+
+.popup-key {
+    font-weight: bold;
+    width: 35%; 
+    padding-right: 5px;
+    white-space: nowrap;
+}
+
+.popup-value {
+    word-wrap: break-word;
+    padding-left: 5px;
+}
+
+.null-info {
+    font-style: italic;
+    opacity: 0.6;
 }

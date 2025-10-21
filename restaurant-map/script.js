@@ -1,118 +1,334 @@
 // script.js
 
 // --- 1. CORE MAP AND DATA INITIALIZATION ---
+
+// Map and Data Containers
 let map;
 let allMarkers = [];
 let markersLayer = L.layerGroup();
 const LIST_CONTAINER = document.getElementById('restaurant-list');
-const API_BASE_URL = 'http://localhost:3000/api/resolve-google-link';
+// Base URL for your geocoding proxy service (currently simulated/commented out)
+const API_BASE_URL = 'http://localhost:3000/api/resolve-google-link'; 
 
-// Placeholder coordinates for demonstration (Los Angeles area)
+// --- Configuration Variables ---
+
+// Path to your local CSV data file
+const CSV_FILE_PATH = 'data/restaurants.csv'; 
+
+// Placeholder coordinates for demonstration (Los Angeles area center)
 const LA_CENTER = [34.0522, -118.2437]; 
-const STARTING_ZOOM = 12;
+// UPDATED: Set a closer starting zoom level (12 is city, 14 is neighborhood/area)
+const STARTING_ZOOM = 14; 
+// Define the correct header row for PapaParse to use (must match the column names)
+const CORRECT_HEADER = "Name,URL,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday,GAMES?!,HAUNTED?!";
 
-// Hardcoded CSV content from the uploaded file (cleaned for PapaParse)
-const RAW_CSV_DATA = `Name,URL,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday,GAMES?!,HAUNTED?!
-MELROSE FAIRFAX / WEHO,,,,,,,,,,
-Akuma,https://maps.app.goo.gl/JBrzJtMsUfsgY9jo6,"3pm-5pm 50% house sake / draft beer / wine","3pm-5pm 50% house sake / draft beer / wine","3pm-5pm 50% house sake / draft beer / wine","3pm-5pm 50% house sake / draft beer / wine","3pm-5pm 50% house sake / draft beer / wine",,,,
-Badmaash,,3-6pm; 9 - 10pm $10 wine / $6 beer / $6-10 food specials,"3-6pm; 9 - 10pm $10 wine / $6 beer / $6-10 food specials","3-6pm; 9 - 10pm $10 wine / $6 beer / $6-10 food specials","3-6pm; 9 - 10pm $10 wine / $6 beer / $6-10 food specials","3-6pm $10 wine / $6 beer / $6-10 food specials","3-6pm $10 wine / $6 beer / $6-10 food specials","3-6pm; 9 - 10pm $10 wine / $6 beer / $6-10 food specials",,
-Bao Dim Sum,,"5-7pm; $7 Beers Wines Wells / $9 apps / $10 cocktails","5-7pm; $7 Beers Wines Wells / $9 apps / $10 cocktails","5-7pm; $7 Beers Wines Wells / $9 apps / $10 cocktails","5-7pm; $7 Beers Wines Wells / $9 apps / $10 cocktails","5-7pm; $7 Beers Wines Wells / $9 apps / $10 cocktails",N/A,N/A,,
-Bar Lubitsch,,TBC,TBC,TBC,TBC,TBC,,,DANCING,N
-Barney's Beanery,,4-7pm,"4-7pm / Trivia @ 9pm!",4-7pm,4-7pm,4-7pm,,,POOL TABLES,Y
-The Belmont,,N/A,"4-7pm $5-$6 beers / $7 spirits / $6 wine Karaoke @ 9pm","4-7pm $5-$6 beers / $7 spirits / Wine Weds $7 all day","4-7pm $5-$6 beers / $7 spirits / $6 wine","4-7pm $5-$6 beers / $7 spirits / $6 wine",,,TV'S,N
-Blue Collar,,N/A,N/A,N/A,N/A,N/A,,,DARKNESS,M
-Blue Daisy - Palihotel,,"4-7pm $9 Cocktails & Food","4-7pm $9 Cocktails & Food","4-7pm $9 Cocktails & Food","4-7pm $9 Cocktails & Food","4-7pm $9 Cocktails & Food",,,,N
-Chao Krung,,4:30pm-6pm,4:30pm-6pm,4:30pm-6pm,4:30pm-6pm,4:30pm-6pm,4:30pm-6pm,4:30pm-6pm,,
-The Den,,N/A,"5-7pm $8 wells / $2 off all beers","5-7pm $8 wells / $2 off all beers Karaoke @ 9:45pm","5-7pm $8 wells / $2 off all beers","5-7pm $8 wells / $2 off all beers",,,,N
-El Carmen,,"5-7pm; 10:30 - 2:00am $7 Margs / $3 tacos","5-7pm; 10:30 - 2:00am $7 Margs / $3 tacos","5-7pm; 10:30 - 2:00am $7 Margs / $3 tacos","5-7pm; 10:30 - 2:00am $7 Margs / $3 tacos","5-7pm; $7 Margs / $3 tacos",,"5-7pm; 10:30 - 2:00am $7 Margs / $3 tacos",,N
-EP-LP,,4pm-6pm,4pm-6pm,4pm-6pm,4pm-6pm,4pm-6pm,,,HOES & TRICKS,N
-Employees Only,,N/A,"6-8pm Food & $12 Drinks","6-8pm Food & $12 Drinks","6-8pm Food & $12 Drinks","6-8pm Food & $12 Drinks","6-8pm Food & $12 Drinks","6-8pm Food & $12 Drinks",,N
-Formosa Cafe,,"3-6pm $10 cocktails / $5 beer / $10 food specials","3-6pm $10 cocktails / $5 beer / $10 food specials","3-6pm $10 cocktails / $5 beer / $10 food specials","3-6pm $10 cocktails / $5 beer / $10 food specials","3-6pm $10 cocktails / $5 beer / $10 food specials","3-6pm $10 cocktails / $5 beer / $10 food specials","3-6pm $10 cocktails / $5 beer / $10 food specials",,H'D AF
-Gracias Madre,,"3pm-6pm $9 Marg / $6 Beer / $7 Bites Mezcal Monday!","3pm-6pm $9 Marg / $6 Beer / $7 Bites Taco Tuesdays (3 for $25)!","3pm-6pm $9 Marg / $6 Beer / $7 Bites","3pm-6pm $9 Marg / $6 Beer / $7 Bites","3pm-6pm $9 Marg / $6 Beer / $7 Bites",,,BEST OUTSIDE PATIO,N
-Harlowe,,N/A,"5-7pm $10 Cocktails / $8 Wells / $1 off Beer","5-7pm $10 Cocktails / $8 Wells / $1 off Beer","5-7pm $10 Cocktails / $8 Wells / $1 off Beer","5-7pm $10 Cocktails / $8 Wells / $1 off Beer","5-7pm $10 Cocktails / $8 Wells / $1 off Beer","5-7pm $10 Cocktails / $8 Wells / $1 off Beer",DANCING; GHOSTS,H'D AF
-The Henry,,"3 - 6pm $8 draft beer / $12 cocktails; food deals","3 - 6pm $8 draft beer / $12 cocktails; food deals","3 - 6pm $8 draft beer / $12 cocktails; food deals","3 - 6pm $8 draft beer / $12 cocktails; food deals","3 - 6pm $8 draft beer / $12 cocktails; food deals",,,,
-Hi-Tops,,"12pm-8pm $5 all beer / $5 wells / $5 wings all day","12pm-8pm $5 all beer / $5 wells Trivia @ 8pm!","12pm-8pm $5 all beer / $5 wells","12pm-8pm $5 all beer / $5 wells","12pm-8pm $5 all beer / $5 wells","12pm-8pm $5 all beer / $5 wells","12pm-8pm $5 all beer / $5 wells",TV'S; GAY BOYS,N
-Jones,,"10:30pm - 2am / $7 cocktails / $5 beers / $10 HH Apps & Pizzas","10:30pm - 2am / $7 cocktails / $5 beers / $10 HH Apps & Pizzas","10:30pm - 2am / $7 cocktails / $5 beers / $10 HH Apps & Pizzas","10:30pm - 2am / $7 cocktails / $5 beers / $10 HH Apps & Pizzas",N/A,N/A,"10:30pm - 2am / $7 cocktails / $5 beers / $10 HH Apps & Pizzas",,
-Kinari,,"4pm-7pm $6 Draft / $9 Sake / Food","4pm-7pm $6 Draft / $9 Sake / Food","4pm-7pm $6 Draft / $9 Sake / Food","4pm-7pm $6 Draft / $9 Sake / Food","4pm-7pm $6 Draft / $9 Sake / Food",,,TV'S,Y
-Laurel Hardware,,"5pm-6pm $12-$14 cocktails & food","5pm-6pm $12-$14 cocktails & food","5pm-6pm $12-$14 cocktails & food","5pm-6pm $12-$14 cocktails & food","5pm-6pm $12-$14 cocktails & food","5pm-6pm $12-$14 cocktails & food","5pm-6pm $12-$14 cocktails & food",,
-Las Perlas,,"5-8pm bar / 5-7pm tacos back patio","5-8pm bar / 5-7pm tacos back patio","5-8pm bar / 5-7pm tacos back patio","5-8pm bar / 5-7pm tacos back patio","5-8pm bar / 5-7pm tacos back patio",,,,N
-Madre,,"3-6pm $9 margaritas / $6 taco apps","3-6pm $9 margaritas / $6 taco apps","3-6pm $9 margaritas / $6 taco apps","3-6pm $9 margaritas / $6 taco apps","3-6pm $9 margaritas / $6 taco apps",,,,N
-Melrose Umbrella Co.,,"5-7pm $12 cocktails / $5 Miller HL","5-7pm $12 cocktails / $5 Miller HL","5-7pm $12 cocktails / $5 Miller HL","5-7pm $12 cocktails / $5 Miller HL","5-7pm $12 cocktails / $5 Miller HL",,,GHOSTS,H'D AF
-Mercado,,,5-7pm,5-7pm,5-7pm,4 - 6pm,4 - 6pm,4 - 6pm,,N
-Mr. Furleys W 3rd,,"5-9pm Buy 2 drinks Get 3rd FREE","5-9pm Buy 2 drinks Get 3rd FREE","5-9pm Buy 2 drinks Get 3rd FREE","5-9pm Buy 2 drinks Get 3rd FREE","5-9pm Buy 2 drinks Get 3rd FREE","5-9pm Buy 2 drinks Get 3rd FREE","5-9pm Buy 2 drinks Get 3rd FREE",DARTS; POOL TABLE,M
-OR Bar,,"4pm-7pm $9 Cocktails / $6.50 Beer / $13 Martinis/Negronis","4pm-7pm $9 Cocktails / $6.50 Beer / $13 Martinis/Negronis","4pm-7pm $9 Cocktails / $6.50 Beer / $13 Martinis/Negronis","4pm-7pm $9 Cocktails / $6.50 Beer / $13 Martinis/Negronis","4pm-7pm $9 Cocktails / $6.50 Beer / $13 Martinis/Negronis",,,,
-The Phoenix,,"5pm-8pm $90 Cocktail Pitchers / $32 Beer Pitchers","5pm-8pm $90 Cocktail Pitchers / $32 Beer Pitchers","5pm-8pm $90 Cocktail Pitchers / $32 Beer Pitchers","5pm-8pm $90 Cocktail Pitchers / $32 Beer Pitchers","5pm-8pm $90 Cocktail Pitchers / $32 Beer Pitchers",,,,
-Phorage Weho,,"3-6pm $7 Well / $5 Beers & Wine Martini Mondays All Nite $12 All Martinis","3-6pm $7 Well / $5 Beers & Wine Tequila & Mezcal All Nite Top Shelf Double Pours & $2 off all Tequila/Mezcal","3-6pm $7 Well / $5 Beers & Wine Whiskey & Wine All Nite Top Shelf Double Pours & $2 off any Whiskey","3-6pm $7 Well / $5 Beers & Wine / $2 Off Small Bites","3-6pm $7 Well / $5 Beers & Wine / $2 Off Small Bites",,"3-6pm $7 Well / $5 Beers & Wine / $2 Off Small Bites",,N
-Snake Pit Alehouse,,"3pm - Midnight $8 wells / $6 select beers / food specials","3 - 7pm $8 wells / $6 select beers; $2 Taco Tues / $5 Tecate","3 - 7pm $8 wells / $6 select beers / food specials / Weds $6 Buffalo Wings","3 - 7pm $8 wells / $6 select beers / food specials","3 - 7pm $8 wells / $6 select beers / food specials",,"7 - 9pm $8 wells / $6 select beers / food specials",JUKEBOX,N
-Surly Goat,,"6pm-8pm select drafts / wells Trivia!","6-8pm select drafts / wells","6-8pm select drafts / wells Karaoke!","6-8pm select drafts / wells","6-8pm select drafts / wells",,,"DARTS OUTDOOR PATIO",N
-Tacos Tu Madre,,"3pm-6pm $10 Cocktails / $6 Beers + Food","3pm-6pm $10 Cocktails / $6 Beers + Food","3pm-6pm $10 Cocktails / $6 Beers + Food","3pm-6pm $10 Cocktails / $6 Beers + Food","3pm-6pm $10 Cocktails / $6 Beers + Food",,,,
-The 3rd Stop,,"4 - 7pm; 11pm-1a $6 draft beer / $7 wine; app deals","4 - 7pm; 11pm-1a $6 draft beer / $7 wine; app deals","4 - 7pm; 11pm-1a $6 draft beer / $7 wine; app deals","4 - 7pm; 11pm-1a $6 draft beer / $7 wine; app deals","4 - 7pm; 11pm-1a $6 draft beer / $7 wine; app deals","4 - 7pm; 11pm-1a $6 draft beer / $7 wine; app deals","4 - 7pm; 11pm-1a $6 draft beer / $7 wine; app deals",SPORTS WATCHIN',
-Terroni,,"4 - 5:30pm *Bar & Patio ONLY","4 - 5:30pm *Bar & Patio ONLY","4 - 5:30pm *Bar & Patio ONLY","4 - 5:30pm *Bar & Patio ONLY","4 - 5:30pm *Bar & Patio ONLY",,,,N
-33 Taps,,"3 - 7pm $5 33T beers / $7 wells / $8 cocktails / $9 food apps","3 - 7pm $5 33T beers / $7 wells / $8 cocktails / $9 food apps / TACO TUES all day $8 margs + $9 three tacos","3 - 7pm $5 33T beers / $7 wells / $8 cocktails / $9 food apps","3 - 7pm $5 33T beers / $7 wells / $8 cocktails / $9 food apps","3 - 7pm $5 33T beers / $7 wells / $8 cocktails / $9 food apps","9:30pm - close $5 33T beers / $7 wells / $8 cocktails / $9 food apps","9:30pm - close $5 33T beers / $7 wells / $8 cocktails / $9 food apps",SPORTS WATCHIN',
-,,,,,,,,,,
-HOLLYWOOD,,,,,,,,,,
-Desert 5,,,,"6 - 8pm / $6 beer & wine; $12 cocktails; $10 for two tacos","6 - 8pm / $6 beer & wine; $12 cocktails; $10 for two tacos","6 - 8pm / $6 beer & wine; $12 cocktails; $10 for two tacos",,,,
-Electric Owl,,N/A,N/A,"2 - 5pm; 10 - 11pm $10 cocktails / ~$10 apps","2 - 5pm; 10 - 11pm $10 cocktails / ~$10 apps","2 - 5pm; 11 - 12am $10 cocktails / ~$10 apps","2 - 5pm; 11 - 12am $10 cocktails / ~$10 apps","2 - 5pm; 10 - 11pm $10 cocktails / ~$10 apps",SPORTS WATCHIN',N
-Good Times at Davey Wayne's,,"4 - 6pm / $10 cocktails; $8 wines; $5-7 cans","4 - 6pm / $10 cocktails; $8 wines; $5-7 cans","4 - 6pm / $10 cocktails; $8 wines; $5-7 cans","4 - 6pm / $10 cocktails; $8 wines; $5-7 cans","4 - 6pm / $10 cocktails; $8 wines; $5-7 cans","4 - 6pm / $10 cocktails; $8 wines; $5-7 cans","4 - 6pm / $10 cocktails; $8 wines; $5-7 cans",DANCING,
-Jay's Bar,,"4 - 7pm / $5 wells / $7 select drafts","4 - 7pm / $5 wells / $7 select drafts","4 - 7pm / $5 wells / $7 select drafts","4 - 7pm / $5 wells / $7 select drafts","4 - 7pm / $5 wells / $7 select drafts",,,,
-Mother Tongue,,,,"4 - 6pm / $10 cocktails & wine; $5 beers; $4 - 8 bar bites","4 - 6pm / $10 cocktails & wine; $5 beers; $4 - 8 bar bites","4 - 6pm / $10 cocktails & wine; $5 beers; $4 - 8 bar bites","4 - 6pm / $10 cocktails & wine; $5 beers; $4 - 8 bar bites","4 - 6pm / $10 cocktails & wine; $5 beers; $4 - 8 bar bites",,
-Power House,,"4 - 7pm / $7 wells / $9 Marg & Old Fashioned","4 - 7pm / $7 wells / $9 Marg & Old Fashioned","4 - 7pm / $7 wells / $9 Marg & Old Fashioned","4 - 7pm / $7 wells / $9 Marg & Old Fashioned","4 - 7pm / $7 wells / $9 Marg & Old Fashioned","4 - 7pm / $7 wells / $9 Marg & Old Fashioned","4 - 7pm / $7 wells / $9 Marg & Old Fashioned",,
-Sunset Vinyl,,"7 - 8pm / $5 wells","7 - 8pm / $5 wells","7 - 8pm / $5 wells","7 - 8pm / $5 wells","7 - 8pm / $5 wells","7 - 8pm / $5 wells","7 - 8pm / $5 wells",QUEUEING RECORDS,
-The Well,,5 - 8pm,"5-8pm / Trivia",5 - 8pm,5 - 8pm,5 - 8pm,,,JUKEBOX,
-,,,,,,,,,,
-MID-CITY / WEST ADAMS / KOREATOWN,,,,,,,,,,
-All Seasons Brewing,,3pm-7pm / Beer & Shot Specials,3pm-7pm / Beer & Shot Specials,3pm-7pm / Beer & Shot Specials,3pm-7pm / Beer & Shot Specials,3pm-7pm / Beer & Shot Specials,,,SKEE-BALL,
-Breakroom 86,,,"9pm-10pm BUY ONE GET ONE FREE DRINKS!","9pm-10pm BUY ONE GET ONE FREE DRINKS!","9pm-10pm BUY ONE GET ONE FREE DRINKS!",,,,,
-Delicious Pizza,,4 - 6pm; 50% off whole pizzas + draft and wine deals ,4 - 6pm; 50% off whole pizzas + draft and wine deals ,4 - 6pm; 50% off whole pizzas + draft and wine deals ,4 - 6pm; 50% off whole pizzas + draft and wine deals ,N/A,N/A,N/A,,
-Escala,,"4 - 7pm; 11 - 1am $7 Beer; $7 wines & wells; $7 old fashioneds; select food ","4 - 7pm; 11 - 1am $7 Beer; $7 wines & wells; $7 old fashioneds; select food ","4 - 7pm; 11 - 1am $7 Beer; $7 wines & wells; $7 old fashioneds; select food ","4 - 7pm; 11 - 1am $7 Beer; $7 wines & wells; $7 old fashioneds; select food ","4 - 7pm $7 Beer; $7 wines & wells; $7 old fashioneds; select food ","4 - 7pm $7 Beer; $7 wines & wells; $7 old fashioneds; select food ","4 - 7pm; 11 - 1am $7 Beer; $7 wines & wells; $7 old fashioneds; select food ",,
-Founders Ale House,,"12 - 7pm / $5 HH food $12 cocktails & $6 beer","12 - 7pm / $5 HH food $12 cocktails & $6 beer","12 - 7pm / $5 HH food $12 cocktails & $6 beer","12 - 7pm / $5 HH food $12 cocktails & $6 beer","12 - 7pm / $5 HH food $12 cocktails & $6 beer","12 - 7pm / $5 HH food $12 cocktails & $6 beer","12 - 7pm / $5 HH food $12 cocktails & $6 beer",SPORTS WATCHIN'; NFL BLITZ,
-Frank 'n Hanks,,"6pm-8pm $4 PBR Tall Boys","6pm-8pm $4 PBR Tall Boys","6pm-8pm $4 PBR Tall Boys","6pm-8pm $4 PBR Tall Boys","6pm-8pm $4 PBR Tall Boys","6pm-8pm $4 PBR Tall Boys","6pm-8pm $4 PBR Tall Boys",POOL TABLE,Y
-The Bar at Johnny's,,,,,,,,,,
-Little Bar,,"2 - 8pm / $7 Wells, Beer & Wine","2 - 8pm / $7 Wells, Beer & Wine","2 - 8pm / $7 Wells, Beer & Wine","2 - 8pm / $7 Wells, Beer & Wine","2 - 8pm / $7 Wells, Beer & Wine","2 - 8pm / $7 Wells, Beer & Wine","2 - 8pm / $7 Wells, Beer & Wine",,
-Lobby Bar @ The Line,,"3pm-7pm $8 well/beer/wine","3pm-7pm $8 well/beer/wine","3pm-7pm $8 well/beer/wine","3pm-7pm $8 well/beer/wine","3pm-7pm $8 well/beer/wine","3pm-7pm $8 well/beer/wine","3pm-7pm $8 well/beer/wine",,
-The Normandie Club,,"6 - 8pm $12 House Cocktails; $7 Bartender’s Choice","6 - 8pm $12 House Cocktails; $7 Bartender’s Choice","6 - 8pm $12 House Cocktails; $7 Bartender’s Choice","6 - 8pm $12 House Cocktails; $7 Bartender’s Choice","6 - 8pm $12 House Cocktails; $7 Bartender’s Choice","6 - 8pm $12 House Cocktails; $7 Bartender’s Choice","6 - 8pm $12 House Cocktails; $7 Bartender’s Choice",,
-,,,,,,,,,,
-DTLA,,,,,,,,,,
-Arts District Brewing Co,,"3 - 7pm / $5 select beers / FREE SKEEBALL","3 - 7pm / $5 select beers / $7 wells","3 - 7pm / $5 select beers / $7 wells","3 - 7pm / $5 select beers / $7 wells","3 - 7pm / $5 select beers / $7 wells",N/A,N/A,"Skeeball (free all Mon); SPORTS WATCHIN'",
-Beelman's Pub,,"4 - 7pm / $11 Cocktails; $8 wine; $6 beer; Select Food & Apps","4 - 7pm / $11 Cocktails; $8 wine; $6 beer; Select Food & Apps","4 - 7pm / $11 Cocktails; $8 wine; $6 beer; Select Food & Apps","4 - 7pm / $11 Cocktails; $8 wine; $6 beer; Select Food & Apps","4 - 7pm / $11 Cocktails; $8 wine; $6 beer; Select Food & Apps",N/A,N/A,,
-Broken Shaker,,"3 - 6pm / $14 Cocktails; $10 wine; $6 beer; Select Food & Apps","3 - 6pm / $14 Cocktails; $10 wine; $6 beer; Select Food & Apps","3 - 6pm / $14 Cocktails; $10 wine; $6 beer; Select Food & Apps","3 - 6pm / $14 Cocktails; $10 wine; $6 beer; Select Food & Apps",N/A,N/A,N/A,VIEWS,
-Everson Royce Bar,,,"4 - 6pm / $11 cocktails; $6-7 beers / $8 wine / $10ish food","4 - 6pm / $11 cocktails; $6-7 beers / $8 wine / $10ish food","4 - 6pm / $11 cocktails; $6-7 beers / $8 wine / $10ish food","4 - 6pm / $11 cocktails; $6-7 beers / $8 wine / $10ish food","2 - 6pm / $11 cocktails; $6-7 beers / $8 wine / $10ish food","2 - 6pm / $11 cocktails; $6-7 beers / $8 wine / $10ish food",OUTDOOR PATIO,
-Far Bar,,"3 - 7pm / $11 Cocktails; Select Food & Apps","3 - 7pm / $11 Cocktails; Select Food & Apps","3 - 7pm / $11 Cocktails; Select Food & Apps","3 - 7pm / $11 Cocktails; Select Food & Apps","3 - 7pm / $11 Cocktails; Select Food & Apps",N/A,N/A,SPORTS WATCHIN',
-Golden Gopher,,"3 - 8pm / $9 Cocktails; $6 wells; $5 beer","3 - 8pm / $9 Cocktails; $6 wells; $5 beer","3 - 8pm / $9 Cocktails; $6 wells; $5 beer","3 - 8pm / $9 Cocktails; $6 wells; $5 beer","3 - 8pm / $9 Cocktails; $6 wells; $5 beer","3 - 8pm / $9 Cocktails; $6 wells; $5 beer","3 - 8pm / $9 Cocktails; $6 wells; $5 beer",POOL TABLE; OUTDOOR PATIO,
-Joey DTLA,,"3 - 6pm / $4 off drinks and dishes","3 - 6pm / $4 off drinks and dishes","3 - 6pm / $4 off drinks and dishes","3 - 6pm / $4 off drinks and dishes","3 - 6pm / $4 off drinks and dishes","3 - 6pm / $4 off drinks and dishes","3 - 6pm / $4 off drinks and dishes",OUTDOOR PATIO,
-Perch,,"4 - 6pm / $9 Cocktails; $7 wine; $5 beer; Select Food & Apps","4 - 6pm / $9 Cocktails; $7 wine; $5 beer; Select Food & Apps","4 - 6pm / $9 Cocktails; $7 wine; $5 beer; Select Food & Apps","4 - 6pm / $9 Cocktails; $7 wine; $5 beer; Select Food & Apps","4 - 6pm / $9 Cocktails; $7 wine; $5 beer; Select Food & Apps",N/A,N/A,VIEWS,
-33 Taps,,"3 - 7pm $5 33T beers / $7 wells / $8 cocktails / $9 food apps","3 - 7pm $5 33T beers / $7 wells / $8 cocktails / $9 food apps / TACO TUES all day $8 margs + $9 three tacos","3 - 7pm $5 33T beers / $7 wells / $8 cocktails / $9 food apps","3 - 7pm $5 33T beers / $7 wells / $8 cocktails / $9 food apps","3 - 7pm $5 33T beers / $7 wells / $8 cocktails / $9 food apps","9:30pm - close $5 33T beers / $7 wells / $8 cocktails / $9 food apps","9:30pm - close $5 33T beers / $7 wells / $8 cocktails / $9 food apps",SPORTS WATCHIN',
-,,,,,,,,,,
-CULVER / WEST LA,,,,,,,,,,
-Bigfoot West,,"5 - 8pm / $6 cocktails & draft beer","5 - 8pm / $6 cocktails & draft beer Trivia 9pm","5 - 8pm / $6 cocktails & draft beer","5 - 8pm / $6 cocktails & draft beer","5 - 8pm / $6 cocktails & draft beer","5 - 8pm / $6 cocktails & draft beer","5 - 8pm / $6 cocktails & draft beer",,
-Maple Block Meat Co.,,"5 - 6:30pm $5 House Cocktails; $5 Beer; $6 Wine; $8 Wings","5 - 6:30pm $5 House Cocktails; $5 Beer; $6 Wine; $8 Wings","5 - 6:30pm $5 House Cocktails; $5 Beer; $6 Wine; $8 Wings","5 - 6:30pm $5 House Cocktails; $5 Beer; $6 Wine; $8 Wings",N/A,N/A,N/A,,
-Nickel Mine,,"5 - 8pm / $6 drinks","5 - 8pm / $6 drinks","5 - 8pm / $6 drinks","5 - 8pm / $6 drinks","5 - 8pm / $6 drinks",N/A,"4 - 8pm / $6 drinks",TABLE GAMES; SPORTS-WATCHIN',
-Oldfield's Liquor Room,,"5 - 7pm / $10 cocktails, $9 wine, $6 draft beer","5 - 7pm / $10 cocktails, $9 wine, $6 draft beer","5 - 7pm / $10 cocktails, $9 wine, $6 draft beer Jazz Trio","5 - 7pm / $10 cocktails, $9 wine, $6 draft beer Jazz Trio","5 - 7pm / $10 cocktails, $9 wine, $6 draft beer","5 - 7pm / $10 cocktails, $9 wine, $6 draft beer","5 - 7pm / $10 cocktails, $9 wine, $6 draft beer",LIVE MUSIC,
-Q's Billiards,,"4 - 7pm / $2 off beers + wells; Select food specials","4 - 7pm / $2 off beers + wells; Select food specials","4 - 7pm / $2 off beers + wells; Select food specials","4 - 7pm / $2 off beers + wells; Select food specials","4 - 7pm / $2 off beers + wells; Select food specials",,,"POOL TABLE; OUTDOOR PATIO; SPORTS WATCHIN'",
-33 Taps,,"3 - 7pm $5 33T beers / $7 wells / $8 cocktails / $9 food apps","3 - 7pm $5 33T beers / $7 wells / $8 cocktails / $9 food apps / TACO TUES all day $8 margs + $9 three tacos","3 - 7pm $5 33T beers / $7 wells / $8 cocktails / $9 food apps","3 - 7pm $5 33T beers / $7 wells / $8 cocktails / $9 food apps","3 - 7pm $5 33T beers / $7 wells / $8 cocktails / $9 food apps","9:30pm - close $5 33T beers / $7 wells / $8 cocktails / $9 food apps","9:30pm - close $5 33T beers / $7 wells / $8 cocktails / $9 food apps",SPORTS WATCHIN',
-,,,,,,,,,,
-SANTA MONICA / VENICE,,,,,,,,,,
-Cabo Cantina,,"4 - 8pm / 10:30p - 12:...`;
-
+// ** NEW: API Key Placeholder and Cache for Full Place Details **
+const API_KEY = "AIzaSyDRk6GSn3W_AgpoEN-blxb2PGctvE9UvPY";
+const GOOGLE_PLACES_BASE_URL = "https://places.googleapis.com/v1/places"; 
+let placeDetailsCache = {}; // Storage for the full place details response
 
 // Custom Marker Icon Definition (Eater Style)
 const EaterIcon = (index) => L.divIcon({
     className: 'eater-marker',
     html: `<span class="marker-number">${index + 1}</span>`,
     iconSize: [30, 30],
-    iconAnchor: [15, 15] // Center the icon
+    iconAnchor: [15, 15] // Centers the icon point
 });
+
+
+// --- NEW METHOD FOR FETCHING GOOGLE MAPS DATA (no change, used for geocoding if implemented) ---
+/**
+ * Asynchronously fetches a restaurant's latitude and longitude 
+ * and official Google Maps URL by sending the name to a backend proxy.
+ */
+async function fetchRestaurantDetails(restaurantName) {
+    const searchQuery = `${restaurantName}, Los Angeles`;
+
+    try {
+        const response = await fetch(API_BASE_URL, {
+            method: 'POST', 
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: searchQuery }),
+        });
+
+        if (!response.ok) {
+            console.error(`Backend error for ${restaurantName}: ${response.statusText}`);
+            return null;
+        }
+
+        const result = await response.json();
+        
+        if (result.success && result.data && result.data.lat && result.data.lng) {
+            return {
+                lat: result.data.lat,
+                lng: result.data.lng,
+                url: result.data.url || '' 
+            };
+        } else {
+            return null;
+        }
+
+    } catch (error) {
+        console.error(`Error fetching details for ${restaurantName}:`, error);
+        return null;
+    }
+}
+// --------------------------------------------------
+
+
+// --- 2. GOOGLE PLACES API METHODS (TWO-STEP PROCESS) ---
+
+/**
+ * Helper to call the Text Search (New) API to get the Place ID.
+ * @param {string} placeName The name of the place to search for.
+ * @returns {Promise<string|null>} The Place ID or null on failure.
+ */
+async function fetchPlaceID(placeName) {
+    console.log(`[Step 1: Text Search] Starting search for: ${placeName}`);
+    
+    const endpoint = `${GOOGLE_PLACES_BASE_URL}:searchText`;
+    
+    const requestBodyContent = {
+        textQuery: `${placeName}, Los Angeles`,
+        maxResultCount: 1, 
+    };
+
+    const requestBodyJson = JSON.stringify(requestBodyContent);
+
+    try {
+        const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Goog-Api-Key': API_KEY,
+                'X-Goog-FieldMask': 'places.id' 
+            },
+            body: requestBodyJson, 
+        });
+        
+        console.log(`[Step 1: Text Search] HTTP Status: ${response.status}`);
+
+        if (!response.ok) {
+            console.error(`[Step 1: Text Search] Error fetching Place ID: ${response.statusText}`);
+            return null;
+        }
+
+        const data = await response.json();
+
+        if (data.places && data.places.length > 0) {
+            const placeId = data.places[0].id;
+            console.log(`[Step 1: Text Search] Success! Found Place ID: ${placeId}`);
+            return placeId;
+        } else {
+            console.warn(`[Step 1: Text Search] No results found for ${placeName}.`);
+            return null;
+        }
+
+    } catch (error) {
+        console.error(`[Step 1: Text Search] Network error:`, error);
+        return null;
+    }
+}
+
+/**
+ * Helper to call the Place Details (New) API with a Place ID.
+ * @param {string} placeId The unique identifier of the place.
+ * @returns {Promise<object|null>} The full place data object or null on failure.
+ */
+async function fetchFullPlaceData(placeId) {
+    console.log(`[Step 2: Place Details] Requesting full data for ID: ${placeId}`);
+
+    const endpoint = `${GOOGLE_PLACES_BASE_URL}/${placeId}`;
+    
+    try {
+        const response = await fetch(endpoint, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Goog-Api-Key': API_KEY,
+                // Request the fields needed for the sidebar rendering and logging
+                'X-Goog-FieldMask': 'displayName,formattedAddress,rating,userRatingCount,currentOpeningHours' 
+            },
+        });
+        
+        console.log(`[Step 2: Place Details] HTTP Status: ${response.status}`);
+
+        if (!response.ok) {
+            console.error(`[Step 2: Place Details] Error fetching details: ${response.statusText}`);
+            return null;
+        }
+
+        const data = await response.json();
+        console.log(`[Step 2: Place Details] Success! Full data received.`);
+        return data;
+
+    } catch (error) {
+        console.error(`[Step 2: Place Details] Network error:`, error);
+        return null;
+    }
+}
+
+/**
+ * Main method to get ALL available data for a place name using the Places API (New).
+ * @param {string} placeName The name of the place.
+ * @returns {Promise<object|null>} The full place details object or null.
+ */
+async function fetchPlaceDetailsByName(placeName) {
+    console.log(`\n--- Starting Full Place Details Request for: ${placeName} ---`);
+    
+    // Check cache first
+    if (placeDetailsCache[placeName]) {
+        console.log(`--- Cache HIT! Returning cached data for ${placeName}. ---`);
+        return placeDetailsCache[placeName];
+    }
+
+    // 1. Get the Place ID
+    const placeId = await fetchPlaceID(placeName);
+    
+    if (!placeId) {
+        console.error(`--- Full Place Details FAILED: Could not get Place ID for ${placeName}. ---`);
+        return null;
+    }
+    
+    // 2. Use the Place ID to get all details
+    const fullDetailsResponse = await fetchFullPlaceData(placeId);
+    
+    if (!fullDetailsResponse) {
+        console.error(`--- Full Place Details FAILED: Could not fetch details for ID ${placeId}. ---`);
+        return null;
+    }
+
+    // --- MAPPED RESPONSE LOGGING ---
+    console.log(`\n=================================================`);
+    console.log(`🚀 RESPONSE OBJECT MAPPING for: ${placeName}`);
+    console.log(`=================================================`);
+    
+    console.log(`[Name] Display Name:`, fullDetailsResponse.displayName?.text);
+    console.log(`[Address] Formatted Address:`, fullDetailsResponse.formattedAddress);
+    console.log(`[Rating] Average Rating:`, fullDetailsResponse.rating || 'N/A');
+    console.log(`[Hours] Current Opening Hours Object:`, fullDetailsResponse.currentOpeningHours);
+    
+    console.log(`\n=================================================\n`);
+    // --- END MAPPED RESPONSE LOGGING ---
+
+    // 3. Store the full response and return it
+    placeDetailsCache[placeName] = fullDetailsResponse;
+    console.log(`--- Full Place Details SUCCESS! Data stored in cache and returned. ---`);
+    
+    return fullDetailsResponse;
+}
+
+// --------------------------------------------------
+// --- END GOOGLE PLACES API METHODS ---
+
+
+// --- UTILITY FUNCTIONS: RENDERING ---
+
+/**
+ * Takes the Google Places currentOpeningHours object and formats it into a clean HTML table.
+ * @param {object|null} hoursObject The currentOpeningHours object from the Places API response.
+ * @returns {string} HTML string of the formatted hours table.
+ */
+function renderOpeningHoursHtml(hoursObject) {
+    // Check for null or missing data, returning a descriptive error message
+    if (!hoursObject || !hoursObject.weekdayDescriptions || hoursObject.weekdayDescriptions.length === 0) {
+        return '<div class="hours-box"><p class="details-subtitle">Operating Hours</p><p class="place-details-error">⚠️ Hours data not available.</p></div>';
+    }
+
+    // Handle 24-hour business status
+    if (hoursObject.textSummary === "Open 24 hours") {
+        return '<div class="hours-box"><p class="details-subtitle">Operating Hours</p><p class="open-24">🟢 Open 24 Hours</p></div>';
+    }
+
+    let html = '<div class="hours-box"><p class="details-subtitle">Operating Hours</p><table class="hours-table">';
+    
+    hoursObject.weekdayDescriptions.forEach(desc => {
+        const parts = desc.split(':');
+        const day = parts[0].trim();
+        const time = parts.slice(1).join(':').trim();
+
+        const today = new Date().toLocaleDateString('en-US', { weekday: 'long' });
+        const highlightClass = day === today ? 'current-day-active' : '';
+
+        // Using a table structure (tr/td)
+        html += `<tr class="hours-entry ${highlightClass}">
+            <td class="hours-day">${day}</td>
+            <td class="hours-time">${time}</td>
+        </tr>`;
+    });
+
+    html += '</table></div>';
+    return html;
+}
+
+/**
+ * Renders the fetched Place Details (Rating and Hours) into the sidebar list item.
+ * This is called AFTER data is fetched to UPDATE the placeholder.
+ * @param {HTMLElement} listItem The list item to modify.
+ * @param {object|null} details The full place details response object, or null for placeholders.
+ */
+function renderPlaceDetails(listItem, details = null) {
+    // If no details, render the initial placeholder (no hours, no rating)
+    if (!details) {
+        return `
+            <div class="place-api-details-injected loading-state">
+                <div class="rating-box">
+                    <span class="rating-value">—</span>
+                    <div class="rating-text-group">
+                        <span class="rating-stars">★★★★★</span>
+                        <span class="review-count">(Loading details...)</span>
+                    </div>
+                </div>
+                <div class="hours-box placeholder">
+                    <p class="details-subtitle">Operating Hours</p>
+                    <p class="place-details-error">Click to load hours.</p>
+                </div>
+            </div>
+        `;
+    }
+
+    // If details are provided, render the live data (called upon successful fetch)
+
+    // Round rating to one decimal place
+    const hoursHtml = renderOpeningHoursHtml(details.currentOpeningHours);
+    const rating = details.rating ? details.rating.toFixed(1) : '—'; 
+    const reviewCount = details.userRatingCount || 0;
+
+    // Create the updated details section HTML
+    const newDetailsHtml = `
+        <div class="place-api-details-injected has-data">
+            <div class="rating-box">
+                <span class="rating-value">${rating}</span>
+                <div class="rating-text-group">
+                    <span class="rating-stars">${'⭐'.repeat(Math.round(rating))}</span>
+                    <span class="review-count">(${reviewCount} reviews)</span>
+                </div>
+            </div>
+            ${hoursHtml}
+        </div>
+    `;
+    
+    // Find the existing placeholder and replace its HTML
+    const existingDetails = listItem.querySelector('.place-api-details-injected');
+    if (existingDetails) {
+        existingDetails.outerHTML = newDetailsHtml;
+    }
+    
+    // Add a class to the list item for enhanced styling
+    listItem.classList.add('has-full-details');
+}
+
 
 /**
  * Creates the HTML content for the Leaflet popup using restaurant data.
  */
 function createPopupContent(data) {
-    // Determine the current day's special
-    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-    const todayIndex = new Date().getDay(); // 0 is Sunday, 1 is Monday...
-    const todayKey = days[todayIndex === 0 ? 6 : todayIndex - 1]; // Map 0 (Sun) to index 6, 1 (Mon) to index 0, etc.
-
+    // ... (unchanged) ...
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const todayIndex = new Date().getDay();
+    const todayKey = days[todayIndex];
     const specialToday = data[todayKey] || 'N/A';
+    const finalUrl = data.URL || '<span class="null-info">N/A</span>';
 
     return `
         <div class="custom-popup-content">
@@ -120,7 +336,7 @@ function createPopupContent(data) {
             <p class="popup-address">Happy Hour Today (${todayKey}): <strong>${specialToday}</strong></p>
             <hr class="popup-divider">
             <table class="popup-table">
-                <tr><td class="popup-key">URL:</td><td class="popup-value">${data.URL || '<span class="null-info">N/A</span>'}</td></tr>
+                <tr><td class="popup-key">URL:</td><td class="popup-value">${finalUrl}</td></tr>
                 <tr><td class="popup-key">Games:</td><td class="popup-value">${data['GAMES?!'] || '<span class="null-info">None</span>'}</td></tr>
                 <tr><td class="popup-key">Haunted:</td><td class="popup-value">${data['HAUNTED?!'] || '<span class="null-info">No</span>'}</td></tr>
             </table>
@@ -130,40 +346,44 @@ function createPopupContent(data) {
 
 /**
  * Creates the HTML list item for the sidebar.
+ * **MODIFIED to include the initial placeholder details section**
  */
 function createListingItem(data, index, marker) {
     const li = document.createElement('li');
     li.className = 'listing-item';
     li.setAttribute('data-index', index);
     
-    // Use the custom marker number (1-based index)
     const markerNumber = index + 1; 
 
-    // Determine the current day's special
-    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const todayIndex = new Date().getDay(); 
-    const todayKey = days[todayIndex === 0 ? 6 : todayIndex - 1];
+    const todayKey = days[todayIndex]; 
 
-    // Build the list item HTML structure
+    // Inject the placeholder rendering here, which includes the 'Fetch Details' button
+    const initialDetailsHtml = renderPlaceDetails(li, null);
+
     li.innerHTML = `
         <div class="listing-header">
             <span class="marker-number">${markerNumber}</span>
             <h3 class="listing-title">${data.Name}</h3>
         </div>
         <p class="listing-special"><strong>Today's Special (${todayKey}):</strong> ${data[todayKey] || 'N/A'}</p>
+        
+        ${initialDetailsHtml}
+
         <button class="share-button" data-restaurant-name="${data.Name}" data-short-url="${data.URL || ''}">
             Share Location
         </button>
     `;
 
-    // Add interactivity to the list item
-    li.addEventListener('click', () => {
-        // Remove 'active' class from all others
+    // Event listener to center map and open popup when list item is clicked
+    li.addEventListener('click', (event) => {
+        // Only trigger map/popup on non-share button clicks
+        if (event.target.closest('.share-button')) return; 
+
         document.querySelectorAll('.listing-item').forEach(item => item.classList.remove('active'));
-        // Add 'active' class to the clicked item
         li.classList.add('active');
         
-        // Center the map and open the corresponding marker popup
         map.setView(marker.getLatLng(), map.getZoom());
         marker.openPopup();
     });
@@ -172,122 +392,202 @@ function createListingItem(data, index, marker) {
 }
 
 
-// --- 2. SHARING LOGIC (Adapted from previous steps) ---
+// --- 3. SHARING AND FETCH DETAILS LOGIC ---
 /**
- * Attaches event listeners to dynamically created 'share-button' elements.
+ * Attaches event listeners to dynamically created 'share-button' elements 
+ * and the 'place-api-details-injected' element for fetching data.
  */
 function initializeSharingListeners() {
-    // Use event delegation on the static list container for efficiency
     LIST_CONTAINER.addEventListener('click', function(event) {
-        const button = event.target.closest('.share-button');
-        if (!button) return; // Not a share button click
-
-        event.preventDefault();
-
-        const restaurantName = button.getAttribute('data-restaurant-name');
-        const shortUrl = button.getAttribute('data-short-url');
+        const shareButton = event.target.closest('.share-button');
+        // Now we bind the fetch action to the entire injected details section
+        const detailsContainer = event.target.closest('.place-api-details-injected');
         
-        console.log('--- Share Button Clicked ---');
+        // Find the corresponding list item (li) for rendering later
+        const listItem = event.target.closest('.listing-item');
+        const restaurantName = listItem.querySelector('.listing-title').textContent.trim();
         
-        // STEP 1: PARSING
-        console.log(`STEP 1 (Parsing): Extracted restaurant name: "${restaurantName}"`);
-        
-        // STEP 2: SEARCHING
-        const searchQuery = `${restaurantName} Google Maps`;
-        console.log(`STEP 2 (Searching): Simulating search query: "${searchQuery}"`);
-
-        // --- SIMULATING THE MULTI-RESULT CHECK ---
-        let resultCount = 1; 
-        if (restaurantName.toLowerCase().includes('akuma')) {
-            // Akuma is set up to fail the single-result check
-            resultCount = 2; 
+        if (shareButton) {
+             event.preventDefault();
+             handleShareButtonClick(shareButton);
+        } else if (detailsContainer && listItem && !detailsContainer.classList.contains('has-data')) {
+             event.preventDefault();
+             // Pass the list item to the handler
+             handleFetchDetailsClick(listItem, restaurantName, detailsContainer);
         }
-        // --- END SIMULATION ---
-        
-        // STEP 3: RESULT CHECK
-        console.log(`STEP 3 (Result Check): Found ${resultCount} location(s) for "${restaurantName}".`);
-
-        // Conditional Check: Skip if more than 1 result
-        if (resultCount > 1) {
-            // Action: Skip and log
-            console.log(`ACTION (Skipping): Skipping share URL generation. We only proceed with a single result.`);
-            console.log('------------------------------------');
-            return null; 
-        }
-        
-        // Action: Generate and return URL (Only runs if resultCount <= 1)
-        
-        const finalUrl = shortUrl || 'https://maps.app.goo.gl/JBrzJtMsUfsgY9jo6,Badmaash'; // Use actual URL if available
-        
-        // STEP 4: URL GENERATION
-        console.log(`STEP 4 (URL Generation): Single result found. Using URL: ${finalUrl}`);
-        console.log(`Resulting URL: ${finalUrl}`);
-        console.log('------------------------------------');
-
-        // Display the URL to the user (in a real app, this would be copied to clipboard)
-        alert(`Simulated Google Maps URL for ${restaurantName}:\n${finalUrl}`);
-
-        return finalUrl;
     });
 }
 
+/** Handles the original share button logic */
+function handleShareButtonClick(button) {
+    // ... (unchanged) ...
+    const restaurantName = button.getAttribute('data-restaurant-name');
+    const shortUrl = button.getAttribute('data-short-url');
+    
+    console.log('--- Share Button Clicked ---');
+    
+    let resultCount = 1; 
+    if (restaurantName.toLowerCase().includes('akuma')) {
+        resultCount = 2; // Simulating a multi-result case to test logic
+    }
+    
+    if (resultCount > 1) {
+        console.log(`ACTION (Skipping): Skipping share URL generation. We only proceed with a single result.`);
+        return null; 
+    }
+    
+    const finalUrl = shortUrl || 'https://maps.app.goo.gl/JBrzJtMsUfsgY9jo6,Badmaash'; 
+    
+    alert(`Simulated Google Maps URL for ${restaurantName}:\n${finalUrl}`);
 
-// --- 3. MAIN EXECUTION FUNCTION ---
-function initializeMapAndData() {
-    // 1. Initialize Map
+    return finalUrl;
+}
+
+/** * Handles the new logic: fetching data when the placeholder hours area is clicked.
+ */
+async function handleFetchDetailsClick(listItem, restaurantName, detailsContainer) {
+    // Prevent double clicks by checking the state class
+    if (detailsContainer.classList.contains('fetching')) return;
+
+    // Set fetching state
+    detailsContainer.classList.add('fetching');
+    detailsContainer.querySelector('.review-count').textContent = '(Fetching...)';
+    
+    // Use the new main method
+    const details = await fetchPlaceDetailsByName(restaurantName);
+    
+    // Clear fetching state
+    detailsContainer.classList.remove('fetching');
+    
+    if (details) {
+        // Render the hours and other Place details to the sidebar
+        renderPlaceDetails(listItem, details);
+        console.log(`Successfully rendered details for ${restaurantName}.`);
+    } else {
+        // Update the placeholder to show failure
+        detailsContainer.querySelector('.review-count').textContent = '(Fetch failed)';
+        detailsContainer.querySelector('.hours-box').innerHTML = '<p class="details-subtitle">Operating Hours</p><p class="place-details-error">❌ Failed to load hours.</p>';
+        alert(`Failed to fetch full details for ${restaurantName}. Check the console for logs.`);
+    }
+}
+
+
+// --- 4. MAIN EXECUTION FUNCTION ---
+// Function is ASYNC to allow fetching the file contents
+async function initializeMapAndData() { 
+    // 1. Initialize Map and Tile Layer
     map = L.map('map', {
-        minZoom: 10 // Prevent zooming out too far
-    }).setView(LA_CENTER, STARTING_ZOOM);
+        minZoom: 10 
+    }).setView(LA_CENTER, STARTING_ZOOM); // Apply LA Center and new Zoom
 
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors © <a href="https://carto.com/attributions">CARTO</a>'
     }).addTo(map);
 
-    // Add marker layer to map
     markersLayer.addTo(map);
 
-
-    // 2. Parse Data
-    Papa.parse(RAW_CSV_DATA, {
-        header: true,
-        skipEmptyLines: true,
-        complete: function(results) {
-            processRestaurantData(results.data);
-            initializeSharingListeners(); // Attach listeners after list items are created
+    // 2. Load and Parse Data from Local File
+    let csvText = '';
+    try {
+        const response = await fetch(CSV_FILE_PATH);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}. Ensure the file exists at: ${CSV_FILE_PATH} (relative to your HTML file).`);
         }
-    });
+        
+        csvText = await response.text();
+
+        // Data Prep: Fix the malformed CSV header
+        const lines = csvText.split('\n');
+        
+        // Skip the first three lines (index 0, 1, 2) which are titles/malformed header.
+        const dataLines = lines.slice(3); 
+
+        // Combine the correct header with the remaining data lines for clean parsing
+        const csvToParse = [CORRECT_HEADER, ...dataLines].join('\n');
+        
+        // Parse the constructed CSV
+        Papa.parse(csvToParse, { 
+            header: true,
+            skipEmptyLines: true,
+            complete: function(results) {
+                if (results.errors.length > 0) {
+                    console.error('PapaParse Errors:', results.errors);
+                }
+                // Process data to create markers and list
+                processRestaurantData(results.data);
+                initializeSharingListeners(); 
+            }
+        });
+
+    } catch (error) {
+        console.error(`Error loading or parsing CSV:`, error);
+        alert(`Could not load data from ${CSV_FILE_PATH}. Check your file path and that your local server is running.`);
+    }
 }
 
 /**
  * Processes the parsed CSV data to create map markers and list items.
  */
 function processRestaurantData(data) {
-    // Filter out area headers (rows where 'URL' is empty but 'Name' is present and all other fields are empty)
+    // Filter: Only process rows that have both a Name and a URL (removes area header rows)
     const validRestaurants = data.filter(row => row.Name && row.URL);
     
-    // Sequential offset for placeholder coordinates
+    // ** New DEMO Call to fetchPlaceDetailsByName (Optional: remove this if you want) **
+    if (validRestaurants.length > 0) {
+        const testPlaceName = validRestaurants[0].Name;
+        
+        (async () => {
+            console.log(`\n*** DEMO CALL: Testing fetchPlaceDetailsByName for "${testPlaceName}" ***`);
+            const apiResponse = await fetchPlaceDetailsByName(testPlaceName);
+            
+            if (apiResponse) {
+                console.log(`\n🎉 DEMO RESULT: API Response successfully retrieved for ${testPlaceName}!`);
+            }
+        })();
+    }
+    // ** End DEMO Call **
+    
+    // Sequential offset variables for distributing placeholder markers
     let latOffset = 0.005;
     let lngOffset = 0.005;
 
-    validRestaurants.forEach((restaurant, index) => {
-        // Placeholder Lat/Lng calculation (for map display only)
-        const lat = LA_CENTER[0] + (latOffset * (index % 10)) * (index % 2 === 0 ? 1 : -1);
-        const lng = LA_CENTER[1] + (lngOffset * (index % 10)) * (index % 3 === 0 ? 1 : -1);
+    // Use Promise.all to handle asynchronous API calls for coordinates
+    const markerPromises = validRestaurants.map(async (restaurant, index) => {
+        let lat, lng;
+        let geoData = null; 
+
+        // --- Use direct geocoding ONLY for the first entry (index 0) for testing ---
+        if (index === 0) {
+            console.log(`\n--- ATTEMPTING DIRECT GOOGLE API CALL FOR: ${restaurant.Name} ---`);
+            geoData = await geocodeWithGoogleApiDirect(restaurant.Name);
+            console.log(`--- DIRECT API CALL COMPLETE ---`);
+        } else {
+            geoData = null; 
+        }
+
+        if (geoData) {
+            lat = geoData.lat;
+            lng = geoData.lng;
+            restaurant.URL = geoData.url || restaurant.URL; 
+        } else {
+            // Fallback: Use placeholder Lat/Lng calculation to distribute markers around LA_CENTER
+            lat = LA_CENTER[0] + (latOffset * (index % 10)) * (index % 2 === 0 ? 1 : -1);
+            lng = LA_CENTER[1] + (lngOffset * (index % 10)) * (index % 3 === 0 ? 1 : -1);
+        }
         
-        // 3. Create Marker Icon and Marker
+        // Create Marker Icon and Marker
         const marker = L.marker([lat, lng], {
             icon: EaterIcon(index),
             title: restaurant.Name
         }).bindPopup(createPopupContent(restaurant));
         
-        // 4. Create Listing Item
+        // Create Listing Item
         const listing = createListingItem(restaurant, index, marker);
 
-        // Link marker and listing together
+        // Link marker click to highlight list item
         marker.on('click', () => {
-            // Remove 'active' class from all others
             document.querySelectorAll('.listing-item').forEach(item => item.classList.remove('active'));
-            // Find and highlight the corresponding list item
             const correspondingItem = document.querySelector(`.listing-item[data-index="${index}"]`);
             if (correspondingItem) {
                 correspondingItem.classList.add('active');
@@ -297,11 +597,55 @@ function processRestaurantData(data) {
 
         allMarkers.push(marker);
         LIST_CONTAINER.appendChild(listing);
+
+        return marker;
     });
 
-    // Add all markers to the map
-    markersLayer.addLayer(L.featureGroup(allMarkers));
+    // Add all markers to the map once all promises are resolved
+    Promise.all(markerPromises).then(() => {
+        if (allMarkers.length > 0) {
+            markersLayer.addLayer(L.featureGroup(allMarkers));
+        }
+    });
 }
 
-// Start the application
+// --- NEW METHOD FOR DIRECT GOOGLE MAPS API ACCESS (Illustrative ONLY) ---
+/**
+ * Illustrative function to show a direct call to the Google Geocoding API.
+ */
+async function geocodeWithGoogleApiDirect(restaurantName) {
+    const API_KEY_GEO = "AIzaSyCVr84tmw2QftHJhvGrMQpewi76bfE9evI"; // Replace with your actual API key
+    
+    const address = encodeURIComponent(`${restaurantName}, Los Angeles`);
+    const endpoint = `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${API_KEY_GEO}`;
+
+    try {
+        const response = await fetch(endpoint);
+        
+        if (!response.ok) {
+            console.error(`[Geocoding Direct] HTTP Error: ${response.status} ${response.statusText}`);
+            return null;
+        }
+
+        const data = await response.json();
+        
+        if (data.status === "OK" && data.results.length > 0) {
+            const location = data.results[0].geometry.location;
+            
+            return {
+                lat: location.lat,
+                lng: location.lng,
+                url: `https://maps.google.com/?q=$${location.lat},${location.lng}` 
+            };
+        } else {
+            return null;
+        }
+
+    } catch (error) {
+        console.error("[Geocoding Direct] Error:", error);
+        return null;
+    }
+}
+
+// Start the application when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', initializeMapAndData);

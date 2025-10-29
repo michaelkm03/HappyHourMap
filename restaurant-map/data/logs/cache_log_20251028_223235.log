@@ -1,0 +1,81 @@
+--- STARTING URL CACHING SCRIPT: Tue Oct 28 22:32:35 PDT 2025 ---
+Reading input from: restaurant-map/data/restaurant.csv (Rows 4-141)
+Writing cache to: restaurant-map/data/google_map_url.csv
+[INFO] Initialized restaurant-map/data/google_map_url.csv with header.
+--- REQUEST: 22:32:35 (Attempt 1) ---
+Processing: Akuma
+  [REQUEST BODY]: {
+  "textQuery": "Akuma, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "8267 Santa Monica Blvd, West Hollywood, CA 90046, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=2595498613213003003&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Akuma USA
+--- REQUEST: 22:32:37 (Attempt 1) ---
+Processing: 50% house sake / draft beer / wine
+  [REQUEST BODY]: {
+  "textQuery": "50% house sake / draft beer / wine, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "2311 Cotner Ave, Los Angeles, CA 90064, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=3904448381055779253&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: 50% house sake / draft beer / wine USA
+--- REQUEST: 22:32:40 (Attempt 1) ---
+Processing: 50% house sake / draft beer / wine
+  [REQUEST BODY]: {
+  "textQuery": "50% house sake / draft beer / wine, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "3200 W Jefferson Blvd, Los Angeles, CA 90018, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=3375588056131886533&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: 50% house sake / draft beer / wine USA
+--- REQUEST: 22:32:42 (Attempt 1) ---
+Processing: 50% house sake / draft beer / wine
+  [REQUEST BODY]: {
+  "textQuery": "50% house sake / draft beer / wine, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "2311 Cotner Ave, Los Angeles, CA 90064, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=3904448381055779253&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: 50% house sake / draft beer / wine USA
+--- REQUEST: 22:32:44 (Attempt 1) ---
+Processing: 50% house sake / draft beer / wine
+  [REQUEST BODY]: {
+  "textQuery": "50% house sake / draft beer / wine, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "3200 W Jefferson Blvd, Los Angeles, CA 90018, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=3375588056131886533&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: 50% house sake / draft beer / wine USA
+--- REQUEST: 22:32:46 (Attempt 1) ---
+Processing: 50% house sake / draft beer / wine

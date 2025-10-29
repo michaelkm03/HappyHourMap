@@ -1,0 +1,1985 @@
+--- STARTING URL CACHING SCRIPT: Tue Oct 28 22:49:07 PDT 2025 ---
+Reading input from: restaurant-map/data/restaurants.csv (Single Column, All Rows)
+Writing cache to: restaurant-map/data/google_map_url.csv
+[INFO] Initialized restaurant-map/data/google_map_url.csv with header.
+--- REQUEST: 22:49:07 (Attempt 1) ---
+Processing: Akuma
+  [REQUEST BODY]: {
+  "textQuery": "Akuma, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "8267 Santa Monica Blvd, West Hollywood, CA 90046, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=2595498613213003003&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Akuma USA
+--- REQUEST: 22:49:09 (Attempt 1) ---
+Processing: Badmaash
+  [REQUEST BODY]: {
+  "textQuery": "Badmaash, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "108 W 2nd St APT 104, Los Angeles, CA 90012, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=6203232972313248096&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Badmaash USA
+--- REQUEST: 22:49:11 (Attempt 1) ---
+Processing: Bao Dim Sum
+  [REQUEST BODY]: {
+  "textQuery": "Bao Dim Sum, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "8256 Beverly Blvd, Los Angeles, CA 90048, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=4944968511888131955&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Bao Dim Sum USA
+--- REQUEST: 22:49:13 (Attempt 1) ---
+Processing: Bar Lubitsch
+  [REQUEST BODY]: {
+  "textQuery": "Bar Lubitsch, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "7702 Santa Monica Blvd, West Hollywood, CA 90046, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=14816937346540407807&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Bar Lubitsch USA
+--- REQUEST: 22:49:16 (Attempt 1) ---
+Processing: Barney's Beanery
+  [REQUEST BODY]: {
+  "textQuery": "Barney's Beanery, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "8447 Santa Monica Blvd, West Hollywood, CA 90069, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=3109210688223960768&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Barney's Beanery USA
+--- REQUEST: 22:49:18 (Attempt 1) ---
+Processing: The Belmont
+  [REQUEST BODY]: {
+  "textQuery": "The Belmont, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "747 N La Cienega Blvd, Los Angeles, CA 90069, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=5310394869457036678&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: The Belmont USA
+--- REQUEST: 22:49:20 (Attempt 1) ---
+Processing: Blue Collar
+  [REQUEST BODY]: {
+  "textQuery": "Blue Collar, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "361 S Fairfax Ave, Los Angeles, CA 90036, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=2445152445501683697&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Blue Collar USA
+--- REQUEST: 22:49:22 (Attempt 1) ---
+Processing: Blue Daisy - Palihotel
+  [REQUEST BODY]: {
+  "textQuery": "Blue Daisy - Palihotel, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "7950 Melrose Ave, Los Angeles, CA 90046, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=11889625348572158033&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Blue Daisy - Palihotel USA
+--- REQUEST: 22:49:24 (Attempt 1) ---
+Processing: Chao Krung
+  [REQUEST BODY]: {
+  "textQuery": "Chao Krung, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "111 N Fairfax Ave, Los Angeles, CA 90036, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=17673482243836998847&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Chao Krung USA
+--- REQUEST: 22:49:26 (Attempt 1) ---
+Processing: The Den
+  [REQUEST BODY]: {
+  "textQuery": "The Den, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "8226 Sunset Blvd, West Hollywood, CA 90046, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=2894987656518709206&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: The Den USA
+--- REQUEST: 22:49:28 (Attempt 1) ---
+Processing: El Carmen
+  [REQUEST BODY]: {
+  "textQuery": "El Carmen, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "8138 W 3rd St, Los Angeles, CA 90048, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=8755073309619719288&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: El Carmen USA
+--- REQUEST: 22:49:30 (Attempt 1) ---
+Processing: EP-LP
+  [REQUEST BODY]: {
+  "textQuery": "EP-LP, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "603 N La Cienega Blvd, West Hollywood, CA 90069, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=704670832781504746&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: EP-LP USA
+--- REQUEST: 22:49:32 (Attempt 1) ---
+Processing: Employees Only
+  [REQUEST BODY]: {
+  "textQuery": "Employees Only, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "7953 Santa Monica Blvd, West Hollywood, CA 90046, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=10568085337037402081&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Employees Only USA
+--- REQUEST: 22:49:34 (Attempt 1) ---
+Processing: Formosa Cafe
+  [REQUEST BODY]: {
+  "textQuery": "Formosa Cafe, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "7156 Santa Monica Blvd, West Hollywood, CA 90046, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=14682949317920149170&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Formosa Cafe USA
+--- REQUEST: 22:49:36 (Attempt 1) ---
+Processing: Gracias Madre
+  [REQUEST BODY]: {
+  "textQuery": "Gracias Madre, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "8905 Melrose Ave, West Hollywood, CA 90069, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=16040271027876042526&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Gracias Madre USA
+--- REQUEST: 22:49:38 (Attempt 1) ---
+Processing: Harlowe
+  [REQUEST BODY]: {
+  "textQuery": "Harlowe, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "7321 Santa Monica Blvd, West Hollywood, CA 90046, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=11662087089393420580&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Harlowe USA
+--- REQUEST: 22:49:40 (Attempt 1) ---
+Processing: The Henry
+  [REQUEST BODY]: {
+  "textQuery": "The Henry, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "120 N Robertson Blvd, Los Angeles, CA 90048, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=10359485350366858713&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: The Henry USA
+--- REQUEST: 22:49:43 (Attempt 1) ---
+Processing: Hi-Tops
+  [REQUEST BODY]: {
+  "textQuery": "Hi-Tops, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "1714 N Vermont Ave, Los Angeles, CA 90027, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=4944047958818480040&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Hi-Tops USA
+--- REQUEST: 22:49:45 (Attempt 1) ---
+Processing: Jones
+  [REQUEST BODY]: {
+  "textQuery": "Jones, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "7205 Santa Monica Blvd, West Hollywood, CA 90046, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=10057629126821585059&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Jones USA
+--- REQUEST: 22:49:47 (Attempt 1) ---
+Processing: Kinari
+  [REQUEST BODY]: {
+  "textQuery": "Kinari, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "801 N Fairfax Ave, Los Angeles, CA 90046, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=14077426528883217250&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Kinari USA
+--- REQUEST: 22:49:49 (Attempt 1) ---
+Processing: Laurel Hardware
+  [REQUEST BODY]: {
+  "textQuery": "Laurel Hardware, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "7984 Santa Monica Blvd, West Hollywood, CA 90046, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=11980422767060992473&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Laurel Hardware USA
+--- REQUEST: 22:49:51 (Attempt 1) ---
+Processing: Las Perlas
+  [REQUEST BODY]: {
+  "textQuery": "Las Perlas, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "107 E 6th St, Los Angeles, CA 90014, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=9931021046277700799&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Las Perlas USA
+--- REQUEST: 22:49:53 (Attempt 1) ---
+Processing: Madre
+  [REQUEST BODY]: {
+  "textQuery": "Madre, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "801 N Fairfax Ave #101, Los Angeles, CA 90046, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=9250984602494581104&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Madre USA
+--- REQUEST: 22:49:55 (Attempt 1) ---
+Processing: Melrose Umbrella Co.
+  [REQUEST BODY]: {
+  "textQuery": "Melrose Umbrella Co., Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "7465 Melrose Ave, Los Angeles, CA 90046, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=11321764694019804244&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Melrose Umbrella Co. USA
+--- REQUEST: 22:49:57 (Attempt 1) ---
+Processing: Mercado
+  [REQUEST BODY]: {
+  "textQuery": "Mercado, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "3425 1st St, Los Angeles, CA 90063, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=8969681078057852800&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Mercado USA
+--- REQUEST: 22:49:59 (Attempt 1) ---
+Processing: Mr. Furleys W 3rd
+  [REQUEST BODY]: {
+  "textQuery": "Mr. Furleys W 3rd, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "8445 W 3rd St, Los Angeles, CA 90048, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=6434826667180136871&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Mr. Furleys W 3rd USA
+--- REQUEST: 22:50:01 (Attempt 1) ---
+Processing: OR Bar
+  [REQUEST BODY]: {
+  "textQuery": "OR Bar, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "8228 Santa Monica Blvd, West Hollywood, CA 90046, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=11872065185144145365&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: OR Bar USA
+--- REQUEST: 22:50:03 (Attempt 1) ---
+Processing: The Phoenix
+  [REQUEST BODY]: {
+  "textQuery": "The Phoenix, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "8480 W 3rd St, Los Angeles, CA 90048, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=18390320676594090767&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: The Phoenix USA
+--- REQUEST: 22:50:05 (Attempt 1) ---
+Processing: Phorage Weho
+  [REQUEST BODY]: {
+  "textQuery": "Phorage Weho, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "7326 Santa Monica Blvd #10, Los Angeles, CA 90046, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=5779342421658487379&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Phorage Weho USA
+--- REQUEST: 22:50:08 (Attempt 1) ---
+Processing: Snake Pit Alehouse
+  [REQUEST BODY]: {
+  "textQuery": "Snake Pit Alehouse, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "7529 Melrose Ave, Los Angeles, CA 90046, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=10183337500710009108&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Snake Pit Alehouse USA
+--- REQUEST: 22:50:10 (Attempt 1) ---
+Processing: Surly Goat
+  [REQUEST BODY]: {
+  "textQuery": "Surly Goat, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "7929 Santa Monica Blvd, West Hollywood, CA 90046, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=14554943794334663828&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Surly Goat USA
+--- REQUEST: 22:50:12 (Attempt 1) ---
+Processing: Tacos Tu Madre
+  [REQUEST BODY]: {
+  "textQuery": "Tacos Tu Madre, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "1111 Hayworth Ave, Los Angeles, CA 90046, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=8910599073140358487&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Tacos Tu Madre USA
+--- REQUEST: 22:50:14 (Attempt 1) ---
+Processing: The 3rd Stop
+  [REQUEST BODY]: {
+  "textQuery": "The 3rd Stop, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "8636 W 3rd St, Los Angeles, CA 90048, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=17899689916626643444&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: The 3rd Stop USA
+--- REQUEST: 22:50:16 (Attempt 1) ---
+Processing: Terroni
+  [REQUEST BODY]: {
+  "textQuery": "Terroni, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "7605 Beverly Blvd, Los Angeles, CA 90036, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=16665993120947572306&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Terroni USA
+--- REQUEST: 22:50:18 (Attempt 1) ---
+Processing: 33 Taps
+  [REQUEST BODY]: {
+  "textQuery": "33 Taps, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "1240 S Figueroa St, Los Angeles, CA 90015, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=1429498327596697899&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: 33 Taps USA
+--- REQUEST: 22:50:21 (Attempt 1) ---
+Processing: Desert 5
+  [REQUEST BODY]: {
+  "textQuery": "Desert 5, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "6516 Selma Ave, Los Angeles, CA 90028, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=17654792462149624194&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Desert 5 USA
+--- REQUEST: 22:50:23 (Attempt 1) ---
+Processing: Electric Owl
+  [REQUEST BODY]: {
+  "textQuery": "Electric Owl, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "1451 N Gardner St, West Hollywood, CA 90046, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=18356242145920265311&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Electric Owl USA
+--- REQUEST: 22:50:25 (Attempt 1) ---
+Processing: Good Times at Davey Wayne's
+  [REQUEST BODY]: {
+  "textQuery": "Good Times at Davey Wayne's, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "1611 N El Centro Ave, Los Angeles, CA 90028, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=10037345221646604035&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Good Times at Davey Wayne's USA
+--- REQUEST: 22:50:27 (Attempt 1) ---
+Processing: Jay's Bar
+  [REQUEST BODY]: {
+  "textQuery": "Jay's Bar, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "4321 Sunset Blvd, Los Angeles, CA 90029, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=7264119175042115372&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Jay's Bar USA
+--- REQUEST: 22:50:29 (Attempt 1) ---
+Processing: Mother Tongue
+  [REQUEST BODY]: {
+  "textQuery": "Mother Tongue, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "960 N La Brea Ave 4th Floor, Los Angeles, CA 90038, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=14454867485310468324&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Mother Tongue USA
+--- REQUEST: 22:50:31 (Attempt 1) ---
+Processing: Power House
+  [REQUEST BODY]: {
+  "textQuery": "Power House, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "1714 Highland Ave, Los Angeles, CA 90028, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=11682698650544694459&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Power House USA
+--- REQUEST: 22:50:33 (Attempt 1) ---
+Processing: Sunset Vinyl
+  [REQUEST BODY]: {
+  "textQuery": "Sunset Vinyl, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "1521 Vine St, Los Angeles, CA 90028, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=14062406171515063084&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Sunset Vinyl USA
+--- REQUEST: 22:50:35 (Attempt 1) ---
+Processing: The Well
+  [REQUEST BODY]: {
+  "textQuery": "The Well, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "6255 Sunset Blvd, Los Angeles, CA 90028, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=14278525344119121956&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: The Well USA
+--- REQUEST: 22:50:38 (Attempt 1) ---
+Processing: All Seasons Brewing
+  [REQUEST BODY]: {
+  "textQuery": "All Seasons Brewing, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "800 S La Brea Ave, Los Angeles, CA 90036, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=1895768546188553684&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: All Seasons Brewing USA
+--- REQUEST: 22:50:40 (Attempt 1) ---
+Processing: Breakroom 86
+  [REQUEST BODY]: {
+  "textQuery": "Breakroom 86, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "630 S Ardmore Ave, Los Angeles, CA 90010, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=585944012083531389&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Breakroom 86 USA
+--- REQUEST: 22:50:42 (Attempt 1) ---
+Processing: Delicious Pizza
+  [REQUEST BODY]: {
+  "textQuery": "Delicious Pizza, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "5419 W Adams Blvd, Los Angeles, CA 90016, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=7221154802553902263&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Delicious Pizza USA
+--- REQUEST: 22:50:44 (Attempt 1) ---
+Processing: Escala
+  [REQUEST BODY]: {
+  "textQuery": "Escala, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "3451 W 6th St, Los Angeles, CA 90020, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=17094329334952669336&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Escala USA
+--- REQUEST: 22:50:46 (Attempt 1) ---
+Processing: Founders Ale House
+  [REQUEST BODY]: {
+  "textQuery": "Founders Ale House, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "8771 W Pico Blvd, Los Angeles, CA 90035, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=8841327919080696438&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Founders Ale House USA
+--- REQUEST: 22:50:48 (Attempt 1) ---
+Processing: Frank 'n Hanks
+  [REQUEST BODY]: {
+  "textQuery": "Frank 'n Hanks, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "518 S Western Ave, Los Angeles, CA 90020, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=3801972435844512654&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Frank 'n Hanks USA
+--- REQUEST: 22:50:50 (Attempt 1) ---
+Processing: The Bar at Johnny's
+  [REQUEST BODY]: {
+  "textQuery": "The Bar at Johnny's, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "4327 W Adams Blvd, Los Angeles, CA 90018, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=10667033404610405541&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: The Bar at Johnny's USA
+--- REQUEST: 22:50:52 (Attempt 1) ---
+Processing: Little Bar
+  [REQUEST BODY]: {
+  "textQuery": "Little Bar, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "757 S S La Brea Ave, Los Angeles, CA 90036, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=3809388952540120318&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Little Bar USA
+--- REQUEST: 22:50:54 (Attempt 1) ---
+Processing: Lobby Bar @ The Line
+  [REQUEST BODY]: {
+  "textQuery": "Lobby Bar @ The Line, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "3515 Wilshire Blvd, Los Angeles, CA 90010, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=137007065060838895&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Lobby Bar @ The Line USA
+--- REQUEST: 22:50:57 (Attempt 1) ---
+Processing: The Normandie Club
+  [REQUEST BODY]: {
+  "textQuery": "The Normandie Club, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "3612 W 6th St, Los Angeles, CA 90020, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=10247393589135687419&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: The Normandie Club USA
+--- REQUEST: 22:50:59 (Attempt 1) ---
+Processing: Arts District Brewing Co
+  [REQUEST BODY]: {
+  "textQuery": "Arts District Brewing Co, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "828 Traction Ave, Los Angeles, CA 90013, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=14572293836080270156&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Arts District Brewing Co USA
+--- REQUEST: 22:51:01 (Attempt 1) ---
+Processing: Beelman's Pub
+  [REQUEST BODY]: {
+  "textQuery": "Beelman's Pub, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "600 S Spring St, Los Angeles, CA 90014, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=11023777706752314921&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Beelman's Pub USA
+--- REQUEST: 22:51:03 (Attempt 1) ---
+Processing: Broken Shaker
+  [REQUEST BODY]: {
+  "textQuery": "Broken Shaker, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "416 W 8th St, Los Angeles, CA 90014, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=1170426342579754801&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Broken Shaker USA
+--- REQUEST: 22:51:05 (Attempt 1) ---
+Processing: Everson Royce Bar
+  [REQUEST BODY]: {
+  "textQuery": "Everson Royce Bar, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "1936 E 7th St, Los Angeles, CA 90021, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=3371906459490486129&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Everson Royce Bar USA
+--- REQUEST: 22:51:07 (Attempt 1) ---
+Processing: Far Bar
+  [REQUEST BODY]: {
+  "textQuery": "Far Bar, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "347 1st St, Los Angeles, CA 90012, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=5967468054412822445&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Far Bar USA
+--- REQUEST: 22:51:09 (Attempt 1) ---
+Processing: Golden Gopher
+  [REQUEST BODY]: {
+  "textQuery": "Golden Gopher, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "417 W 8th St, Los Angeles, CA 90014, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=10228531836108658801&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Golden Gopher USA
+--- REQUEST: 22:51:11 (Attempt 1) ---
+Processing: Joey DTLA
+  [REQUEST BODY]: {
+  "textQuery": "Joey DTLA, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "700 W 7th St Ste S430, Los Angeles, CA 90017, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=12586880607528883189&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Joey DTLA USA
+--- REQUEST: 22:51:13 (Attempt 1) ---
+Processing: Perch
+  [REQUEST BODY]: {
+  "textQuery": "Perch, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "448 S Hill St, Los Angeles, CA 90013, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=3866628448079004996&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Perch USA
+--- REQUEST: 22:51:16 (Attempt 1) ---
+Processing: 33 Taps
+  [REQUEST BODY]: {
+  "textQuery": "33 Taps, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "1240 S Figueroa St, Los Angeles, CA 90015, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=1429498327596697899&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: 33 Taps USA
+--- REQUEST: 22:51:18 (Attempt 1) ---
+Processing: Bigfoot West
+  [REQUEST BODY]: {
+  "textQuery": "Bigfoot West, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "10939 Venice Blvd., Los Angeles, CA 90034, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=11465172617815465054&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Bigfoot West USA
+--- REQUEST: 22:51:20 (Attempt 1) ---
+Processing: Maple Block Meat Co.
+  [REQUEST BODY]: {
+  "textQuery": "Maple Block Meat Co., Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "3973 Sepulveda Blvd, Culver City, CA 90230, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=1606745421131897708&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Maple Block Meat Co. USA
+--- REQUEST: 22:51:22 (Attempt 1) ---
+Processing: Nickel Mine
+  [REQUEST BODY]: {
+  "textQuery": "Nickel Mine, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "11363 Santa Monica Blvd, Los Angeles, CA 90025, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=14167202315900867170&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Nickel Mine USA
+--- REQUEST: 22:51:24 (Attempt 1) ---
+Processing: Oldfield's Liquor Room
+  [REQUEST BODY]: {
+  "textQuery": "Oldfield's Liquor Room, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "10899 Venice Blvd. W, Los Angeles, CA 90034, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=10689908391870387112&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Oldfield's Liquor Room USA
+--- REQUEST: 22:51:26 (Attempt 1) ---
+Processing: Q's Billiards
+  [REQUEST BODY]: {
+  "textQuery": "Q's Billiards, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "11835 Wilshire Blvd, Los Angeles, CA 90025, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=6049200821890325220&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Q's Billiards USA
+--- REQUEST: 22:51:28 (Attempt 1) ---
+Processing: 33 Taps
+  [REQUEST BODY]: {
+  "textQuery": "33 Taps, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "1240 S Figueroa St, Los Angeles, CA 90015, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=1429498327596697899&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: 33 Taps USA
+--- REQUEST: 22:51:30 (Attempt 1) ---
+Processing: Cabo Cantina
+  [REQUEST BODY]: {
+  "textQuery": "Cabo Cantina, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "6669 Hollywood Blvd, Los Angeles, CA 90028, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=13584409091586557794&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Cabo Cantina USA
+--- REQUEST: 22:51:32 (Attempt 1) ---
+Processing: The Craftsman
+  [REQUEST BODY]: {
+  "textQuery": "The Craftsman, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "208 W 8th St, Los Angeles, CA 90014, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=3722480886316133396&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: The Craftsman USA
+--- REQUEST: 22:51:34 (Attempt 1) ---
+Processing: Duke's Malibu
+  [REQUEST BODY]: {
+  "textQuery": "Duke's Malibu, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "21150 Pacific Coast Hwy, Malibu, CA 90265, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=1513497510111564432&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Duke's Malibu USA
+--- REQUEST: 22:51:36 (Attempt 1) ---
+Processing: Gin Rummy
+  [REQUEST BODY]: {
+  "textQuery": "Gin Rummy, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "822 Washington Blvd, Marina Del Rey, CA 90292, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=10688231107464481664&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Gin Rummy USA
+--- REQUEST: 22:51:38 (Attempt 1) ---
+Processing: The Misfit
+  [REQUEST BODY]: {
+  "textQuery": "The Misfit, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "225 Santa Monica Blvd, Santa Monica, CA 90401, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=730683559197686151&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: The Misfit USA
+--- REQUEST: 22:51:41 (Attempt 1) ---
+Processing: The Santa Monica Whaler
+  [REQUEST BODY]: {
+  "textQuery": "The Santa Monica Whaler, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "101 Broadway, Santa Monica, CA 90401, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=15139348952383136297&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: The Santa Monica Whaler USA
+--- REQUEST: 22:51:43 (Attempt 1) ---
+Processing: The Waterfront Venice
+  [REQUEST BODY]: {
+  "textQuery": "The Waterfront Venice, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "205 Ocean Front Walk, Venice, CA 90291, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=7030651404383979618&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: The Waterfront Venice USA
+--- REQUEST: 22:51:45 (Attempt 1) ---
+Processing: Tavern on Main
+  [REQUEST BODY]: {
+  "textQuery": "Tavern on Main, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "123 Main St, El Segundo, CA 90245, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=3378478415113761689&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Tavern on Main USA
+--- REQUEST: 22:51:47 (Attempt 1) ---
+Processing: Bacari Silverlake
+  [REQUEST BODY]: {
+  "textQuery": "Bacari Silverlake, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "3626 Sunset Blvd, Los Angeles, CA 90026, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=15759891190649939146&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Bacari Silverlake USA
+--- REQUEST: 22:51:49 (Attempt 1) ---
+Processing: Barcade
+  [REQUEST BODY]: {
+  "textQuery": "Barcade, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "5684 York Blvd, Los Angeles, CA 90042, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=3377500441821156305&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Barcade USA
+--- REQUEST: 22:51:51 (Attempt 1) ---
+Processing: Bar Bandini
+  [REQUEST BODY]: {
+  "textQuery": "Bar Bandini, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "2150 Sunset Blvd, Los Angeles, CA 90026, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=12407874994181303694&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Bar Bandini USA
+--- REQUEST: 22:51:53 (Attempt 1) ---
+Processing: Bar Henry
+  [REQUEST BODY]: {
+  "textQuery": "Bar Henry, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "1228 Sunset Blvd, Los Angeles, CA 90026, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=6361717150947778879&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Bar Henry USA
+--- REQUEST: 22:51:55 (Attempt 1) ---
+Processing: Bigfoot Lodge
+  [REQUEST BODY]: {
+  "textQuery": "Bigfoot Lodge, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "3172 Los Feliz Blvd, Los Angeles, CA 90039, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=2201558164065068437&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Bigfoot Lodge USA
+--- REQUEST: 22:51:57 (Attempt 1) ---
+Processing: Cha Cha Lounge
+  [REQUEST BODY]: {
+  "textQuery": "Cha Cha Lounge, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "2375 Glendale Blvd, Los Angeles, CA 90039, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=17283973382231261846&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Cha Cha Lounge USA
+--- REQUEST: 22:52:00 (Attempt 1) ---
+Processing: Club Tee Gee
+  [REQUEST BODY]: {
+  "textQuery": "Club Tee Gee, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "3210 Glendale Blvd, Los Angeles, CA 90039, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=9819539691371869890&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Club Tee Gee USA
+--- REQUEST: 22:52:02 (Attempt 1) ---
+Processing: Encanto
+  [REQUEST BODY]: {
+  "textQuery": "Encanto, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "2121 Hillhurst Ave, Los Angeles, CA 90027, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=17406536592830502452&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Encanto USA
+--- REQUEST: 22:52:04 (Attempt 1) ---
+Processing: The Friend
+  [REQUEST BODY]: {
+  "textQuery": "The Friend, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "2611 Hyperion Ave, Los Angeles, CA 90027, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=17635646340355094647&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: The Friend USA
+--- REQUEST: 22:52:06 (Attempt 1) ---
+Processing: The Greyhound
+  [REQUEST BODY]: {
+  "textQuery": "The Greyhound, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "1716 E 7th St, Los Angeles, CA 90021, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=4303115388649222402&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: The Greyhound USA
+--- REQUEST: 22:52:08 (Attempt 1) ---
+Processing: La Cuevita
+  [REQUEST BODY]: {
+  "textQuery": "La Cuevita, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "5922 N Figueroa St, Los Angeles, CA 90042, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=8784638244326377784&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: La Cuevita USA
+--- REQUEST: 22:52:10 (Attempt 1) ---
+Processing: Link N Hops
+  [REQUEST BODY]: {
+  "textQuery": "Link N Hops, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "3111 Glendale Blvd #3, Los Angeles, CA 90039, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=2203541807552322650&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Link N Hops USA
+--- REQUEST: 22:52:12 (Attempt 1) ---
+Processing: High Low
+  [REQUEST BODY]: {
+  "textQuery": "High Low, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "3000 Los Feliz Blvd, Los Angeles, CA 90039, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=5014182382767265070&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: High Low USA
+--- REQUEST: 22:52:14 (Attempt 1) ---
+Processing: Hi Tops LF
+  [REQUEST BODY]: {
+  "textQuery": "Hi Tops LF, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "8933 Santa Monica Blvd, West Hollywood, CA 90069, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=10889283294111877388&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Hi Tops LF USA
+--- REQUEST: 22:52:16 (Attempt 1) ---
+Processing: HOME
+  [REQUEST BODY]: {
+  "textQuery": "HOME, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "1760 Hillhurst Ave, Los Angeles, CA 90027, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=14748255293556726053&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: HOME USA
+--- REQUEST: 22:52:19 (Attempt 1) ---
+Processing: Justine's Wine Bar
+  [REQUEST BODY]: {
+  "textQuery": "Justine's Wine Bar, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "2029 Blake Ave #102, Los Angeles, CA 90039, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=3526409138723427663&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Justine's Wine Bar USA
+--- REQUEST: 22:52:21 (Attempt 1) ---
+Processing: Kombu Sushi
+  [REQUEST BODY]: {
+  "textQuery": "Kombu Sushi, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "3719 Sunset Blvd, Los Angeles, CA 90026, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=10013223727216139666&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Kombu Sushi USA
+--- REQUEST: 22:52:23 (Attempt 1) ---
+Processing: Mess Hall
+  [REQUEST BODY]: {
+  "textQuery": "Mess Hall, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "4500 Los Feliz Blvd, Los Angeles, CA 90027, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=17176651680219073598&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Mess Hall USA
+--- REQUEST: 22:52:25 (Attempt 1) ---
+Processing: Morrison
+  [REQUEST BODY]: {
+  "textQuery": "Morrison, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "3179 Los Feliz Blvd, Los Angeles, CA 90039, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=3274745315903570558&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Morrison USA
+--- REQUEST: 22:52:27 (Attempt 1) ---
+Processing: Red Lion Tavern
+  [REQUEST BODY]: {
+  "textQuery": "Red Lion Tavern, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "2366 Glendale Blvd, Los Angeles, CA 90039, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=6846299548861410520&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Red Lion Tavern USA
+--- REQUEST: 22:52:29 (Attempt 1) ---
+Processing: Thirsty Crow
+  [REQUEST BODY]: {
+  "textQuery": "Thirsty Crow, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "2939 Sunset Blvd, Los Angeles, CA 90026, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=9597303374072335169&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Thirsty Crow USA
+--- REQUEST: 22:52:31 (Attempt 1) ---
+Processing: Verdugo Bar
+  [REQUEST BODY]: {
+  "textQuery": "Verdugo Bar, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "3408 Verdugo Rd, Los Angeles, CA 90065, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=3731991830589500632&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Verdugo Bar USA
+--- REQUEST: 22:52:33 (Attempt 1) ---
+Processing: 33 Taps
+  [REQUEST BODY]: {
+  "textQuery": "33 Taps, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "1240 S Figueroa St, Los Angeles, CA 90015, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=1429498327596697899&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: 33 Taps USA
+--- REQUEST: 22:52:35 (Attempt 1) ---
+Processing: Aikan Sushi
+  [REQUEST BODY]: {
+  "textQuery": "Aikan Sushi, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "9034 Tampa Ave, Northridge, CA 91324, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=14710805711296827176&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Aikan Sushi USA
+--- REQUEST: 22:52:37 (Attempt 1) ---
+Processing: Broken Compass
+  [REQUEST BODY]: {
+  "textQuery": "Broken Compass, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "2013 W Burbank Blvd, Burbank, CA 91506, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=7744127070519864208&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Broken Compass USA
+--- REQUEST: 22:52:40 (Attempt 1) ---
+Processing: Finney's
+  [REQUEST BODY]: {
+  "textQuery": "Finney's, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "164 E Palm Ave #102, Burbank, CA 91502, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=12577374012768123061&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Finney's USA
+--- REQUEST: 22:52:42 (Attempt 1) ---
+Processing: General Admission
+  [REQUEST BODY]: {
+  "textQuery": "General Admission, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "3311 Cahuenga Blvd W, Los Angeles, CA 90068, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=2229121280470119872&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: General Admission USA
+--- REQUEST: 22:52:44 (Attempt 1) ---
+Processing: El Tejano
+  [REQUEST BODY]: {
+  "textQuery": "El Tejano, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "11122 Magnolia Blvd, North Hollywood, CA 91601, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=1208017632291265376&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: El Tejano USA
+--- REQUEST: 22:52:46 (Attempt 1) ---
+Processing: Idle Hour
+  [REQUEST BODY]: {
+  "textQuery": "Idle Hour, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "4824 Vineland Ave, North Hollywood, CA 91601, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=14718533400971829359&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Idle Hour USA
+--- REQUEST: 22:52:48 (Attempt 1) ---
+Processing: Islands
+  [REQUEST BODY]: {
+  "textQuery": "Islands, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "6081 Center Dr #104, Los Angeles, CA 90045, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=16970828455929159769&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Islands USA
+--- REQUEST: 22:52:50 (Attempt 1) ---
+Processing: Tiki No
+  [REQUEST BODY]: {
+  "textQuery": "Tiki No, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "4657 Lankershim Blvd, North Hollywood, CA 91602, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=17091092062440598906&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Tiki No USA
+--- REQUEST: 22:52:52 (Attempt 1) ---
+Processing: Over / Under
+  [REQUEST BODY]: {
+  "textQuery": "Over / Under, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "310 N San Fernando Blvd, Burbank, CA 91502, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=8118545727696673862&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Over / Under USA
+--- REQUEST: 22:52:55 (Attempt 1) ---
+Processing: Anayas
+  [REQUEST BODY]: {
+  "textQuery": "Anayas, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "4651 W Adams Blvd, Los Angeles, CA 90016, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=6402360662841100724&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Anayas USA
+--- REQUEST: 22:52:56 (Attempt 1) ---
+Processing: Blind Donkey
+  [REQUEST BODY]: {
+  "textQuery": "Blind Donkey, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "53 Union St, Pasadena, CA 91103, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=17981481323107226399&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Blind Donkey USA
+--- REQUEST: 22:52:59 (Attempt 1) ---
+Processing: Cervercería Del Pueblo
+  [REQUEST BODY]: {
+  "textQuery": "Cervercería Del Pueblo, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "141 W Bellevue Dr #100, Pasadena, CA 91105, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=11693529559249703090&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Cervercería Del Pueblo USA
+--- REQUEST: 22:53:01 (Attempt 1) ---
+Processing: California Pizza Kitchen
+  [REQUEST BODY]: {
+  "textQuery": "California Pizza Kitchen, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "735 South Figueroa Street, 7th St Space 305, Los Angeles, CA 90017, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=14294405371277474875&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: California Pizza Kitchen USA
+--- REQUEST: 22:53:03 (Attempt 1) ---
+Processing: Craft by Smoke and Fire
+  [REQUEST BODY]: {
+  "textQuery": "Craft by Smoke and Fire, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "30 W Green St, Pasadena, CA 91105, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=13478363678479127489&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Craft by Smoke and Fire USA
+--- REQUEST: 22:53:05 (Attempt 1) ---
+Processing: Damon's
+  [REQUEST BODY]: {
+  "textQuery": "Damon's, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "317 N Brand Blvd, Glendale, CA 91203, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=6486446881158073048&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Damon's USA
+--- REQUEST: 22:53:07 (Attempt 1) ---
+Processing: Der Wolf
+  [REQUEST BODY]: {
+  "textQuery": "Der Wolf, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "519 S Spring St, Los Angeles, CA 90013, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=14152065006948794215&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Der Wolf USA
+--- REQUEST: 22:53:09 (Attempt 1) ---
+Processing: Edwin Mills by Equator
+  [REQUEST BODY]: {
+  "textQuery": "Edwin Mills by Equator, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "22 Mills Pl, Pasadena, CA 91105, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=661793131083602333&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Edwin Mills by Equator USA
+--- REQUEST: 22:53:11 (Attempt 1) ---
+Processing: The Fable
+  [REQUEST BODY]: {
+  "textQuery": "The Fable, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "1630 Colorado Blvd, Los Angeles, CA 90041, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=7771199744163170428&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: The Fable USA
+--- REQUEST: 22:53:14 (Attempt 1) ---
+Processing: Glendale Tap
+  [REQUEST BODY]: {
+  "textQuery": "Glendale Tap, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "4227 San Fernando Rd, Glendale, CA 91204, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=11993132573485047549&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Glendale Tap USA
+--- REQUEST: 22:53:16 (Attempt 1) ---
+Processing: Kings Row
+  [REQUEST BODY]: {
+  "textQuery": "Kings Row, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "20 E Colorado Blvd Suite 102, Pasadena, CA 91105, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=15415789068490678018&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Kings Row USA
+--- REQUEST: 22:53:18 (Attempt 1) ---
+Processing: Lucky Baldwins
+  [REQUEST BODY]: {
+  "textQuery": "Lucky Baldwins, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "17 S Raymond Ave, Pasadena, CA 91105, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=9898180514319649858&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Lucky Baldwins USA
+--- REQUEST: 22:53:20 (Attempt 1) ---
+Processing: Kabuki
+  [REQUEST BODY]: {
+  "textQuery": "Kabuki, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "6081 Center Dr #203, Los Angeles, CA 90045, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=16732564758900087628&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Kabuki USA
+--- REQUEST: 22:53:22 (Attempt 1) ---
+Processing: Paperback Brewing
+  [REQUEST BODY]: {
+  "textQuery": "Paperback Brewing, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "422 Magnolia Ave, Glendale, CA 91204, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=13777347840249481761&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Paperback Brewing USA
+--- REQUEST: 22:53:24 (Attempt 1) ---
+Processing: Rocco's Tavern
+  [REQUEST BODY]: {
+  "textQuery": "Rocco's Tavern, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "3843 Main St, Culver City, CA 90232, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=14212776882834514671&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Rocco's Tavern USA
+--- REQUEST: 22:53:26 (Attempt 1) ---
+Processing: Taco/Social
+  [REQUEST BODY]: {
+  "textQuery": "Taco/Social, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "1627 Colorado Blvd, Los Angeles, CA 90041, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=14095196171563937520&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Taco/Social USA
+--- REQUEST: 22:53:28 (Attempt 1) ---
+Processing: Yard House
+  [REQUEST BODY]: {
+  "textQuery": "Yard House, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "800 W Olympic Blvd A-115, Los Angeles, CA 90015, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=2663269652518794639&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Yard House USA
+--- REQUEST: 22:53:31 (Attempt 1) ---
+Processing: Bacari PDR
+  [REQUEST BODY]: {
+  "textQuery": "Bacari PDR, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "6805 S Vista Del Mar Ln, Playa Del Rey, CA 90293, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=8140486655596205459&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Bacari PDR USA
+--- REQUEST: 22:53:33 (Attempt 1) ---
+Processing: Baja Sharkeez
+  [REQUEST BODY]: {
+  "textQuery": "Baja Sharkeez, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "3600 Highland Ave, Manhattan Beach, CA 90266, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=13087095718022164644&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Baja Sharkeez USA
+--- REQUEST: 22:53:35 (Attempt 1) ---
+Processing: El Segundo Brewing Company
+  [REQUEST BODY]: {
+  "textQuery": "El Segundo Brewing Company, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "140 Main St, El Segundo, CA 90245, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=17986701665061556232&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: El Segundo Brewing Company USA
+--- REQUEST: 22:53:37 (Attempt 1) ---
+Processing: Ercole's MB
+  [REQUEST BODY]: {
+  "textQuery": "Ercole's MB, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "1101 Manhattan Ave, Manhattan Beach, CA 90266, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=17971283894283162200&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Ercole's MB USA
+--- REQUEST: 22:53:39 (Attempt 1) ---
+Processing: Pitcher House Upper Deck
+  [REQUEST BODY]: {
+  "textQuery": "Pitcher House Upper Deck, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "409 N Pacific Coast Hwy #200, Redondo Beach, CA 90277, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=6918868326894509848&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Pitcher House Upper Deck USA
+--- REQUEST: 22:53:41 (Attempt 1) ---
+Processing: Shellback Tavern
+  [REQUEST BODY]: {
+  "textQuery": "Shellback Tavern, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "116 Manhattan Beach Blvd, Manhattan Beach, CA 90266, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=11687651119090857324&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Shellback Tavern USA
+--- REQUEST: 22:53:43 (Attempt 1) ---
+Processing: Standard Station
+  [REQUEST BODY]: {
+  "textQuery": "Standard Station, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "226 Standard St, El Segundo, CA 90245, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=13897839349186580010&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: Standard Station USA
+--- URL CACHING SCRIPT COMPLETE: Tue Oct 28 22:53:46 PDT 2025 ---

@@ -1,0 +1,40 @@
+--- STARTING URL CACHING SCRIPT: Tue Oct 28 22:40:30 PDT 2025 ---
+Reading input from: restaurant-map/data/restaurant.csv (Rows 6-141, Column A Only)
+Writing cache to: restaurant-map/data/google_map_url.csv
+[INFO] Initialized restaurant-map/data/google_map_url.csv with header.
+--- REQUEST: 22:40:30 (Attempt 1) ---
+Processing: 50% house sake / draft beer / wine
+  [REQUEST BODY]: {
+  "textQuery": "50% house sake / draft beer / wine, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "3200 W Jefferson Blvd, Los Angeles, CA 90018, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=3375588056131886533&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: 50% house sake / draft beer / wine USA
+--- REQUEST: 22:40:32 (Attempt 1) ---
+Processing: 50% house sake / draft beer / wine
+  [REQUEST BODY]: {
+  "textQuery": "50% house sake / draft beer / wine, Los Angeles",
+  "maxResultCount": 1
+}
+  [RAW RESPONSE]: {
+  "places": [
+    {
+      "formattedAddress": "3200 W Jefferson Blvd, Los Angeles, CA 90018, USA",
+      "googleMapsUri": "https://maps.google.com/?cid=3375588056131886533&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA"
+    }
+  ]
+}
+[SUCCESS] Found URL for key: 50% house sake / draft beer / wine USA
+--- REQUEST: 22:40:34 (Attempt 1) ---
+Processing: 50% house sake / draft beer / wine
+  [REQUEST BODY]: {
+  "textQuery": "50% house sake / draft beer / wine, Los Angeles",
+  "maxResultCount": 1
+}

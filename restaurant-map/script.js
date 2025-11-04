@@ -24,7 +24,28 @@ const STARTING_ZOOM = 14;
 const HAPPY_HOUR_HEADER = "Name,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday,GAMES?!,HAUNTED?!,address,restaurant google map url,coordinates"; 
 
 
-// --- NEW DATA STRUCTURE: The Place Class (UNCHANGED) ---
+// --- 2. NEW DATA STRUCTURES ---
+
+/**
+ * Class to hold detailed happy hour data, mapping directly to main.csv columns.
+ */
+class HappyHourData {
+    constructor(dataRow = {}) {
+        // Map CSV column names to properties, using an empty string as a safe fallback
+        this.details_monday = dataRow.details_monday || '';
+        this.details_tuesday = dataRow.details_tuesday || '';
+        this.details_wednesday = dataRow.details_wednesday || '';
+        this.details_thursday = dataRow.details_thursday || '';
+        this.details_friday = dataRow.details_friday || '';
+        this.details_saturday = dataRow.details_saturday || '';
+        this.details_sunday = dataRow.details_sunday || '';
+        
+        // Games and Haunted fields
+        this.details_games = dataRow.details_games || '';
+        this.details_haunted = dataRow.details_haunted || '';
+    }
+}
+
 
 /**
  * Comprehensive class to hold all merged data for a single restaurant.
@@ -32,7 +53,8 @@ const HAPPY_HOUR_HEADER = "Name,Monday,Tuesday,Wednesday,Thursday,Friday,Saturda
 class Place {
     constructor(name) {
         this.name = name;
-        this.happyHourData = {}; 
+        // 🆕 Now initializes a separate class instance
+        this.happyHourData = new HappyHourData(); 
         this.placeId = null;
         this.mapUri = '';
         this.lat = null;
@@ -46,16 +68,14 @@ class Place {
 }
 
 
-// --- 2. GOOGLE API & DATA CACHE FUNCTIONS (API functions removed) ---
-
-
-// --- 3. UI/MAP UTILITY FUNCTIONS (Added definitions to fix ReferenceError) ---
+// --- 3. UI/MAP UTILITY FUNCTIONS ---
 
 const EaterIcon = (index) => L.divIcon({
+    // UPDATED: Removed the number for a simple map dot
     className: 'eater-marker',
-    html: `<span class="marker-number">${index + 1}</span>`,
-    iconSize: [30, 30],
-    iconAnchor: [15, 15] 
+    html: '', 
+    iconSize: [15, 15],
+    iconAnchor: [7, 7]  
 });
 
 /**
@@ -77,8 +97,8 @@ function createPopupContent(place) {
         content += `<p><a href="${cleanUri}" target="_blank">View on Google Maps</a></p>`;
     }
 
-    // Display a sample of happy hour data
-    const mondayData = place.happyHourData.Monday || 'N/A';
+    // Display a sample of happy hour data using the new structure
+    const mondayData = place.happyHourData.details_monday || 'N/A';
     content += `<p><strong>Monday Happy Hour:</strong> ${mondayData}</p>`;
     
     content += `</div>`;
@@ -86,23 +106,47 @@ function createPopupContent(place) {
 }
 
 
+// --- 3. UI/MAP UTILITY FUNCTIONS (UPDATED createListingItem) ---
+
 /**
  * Creates the sidebar listing item for a restaurant and attaches map interaction handlers.
- * @param {Place} place The Place object.
- * @param {number} index The index of the restaurant in the list.
  */
 function createListingItem(place, index) {
+    // Console logs for debugging the new structure (kept for your reference)
+    console.log(`Creating listing item for: ${place.name}`);
+    console.log("Happy Hour Data Object:", place.happyHourData);
+    
     if (!LIST_CONTAINER) return;
 
     const item = document.createElement('div');
     item.className = 'listing-item';
     item.setAttribute('data-index', index);
+
+    // --- Dynamic Content Generation ---
+    let detailsHtml = '';
+    
+    // Loop through every key in the HappyHourData object
+    for (const key in place.happyHourData) {
+        if (place.happyHourData.hasOwnProperty(key)) {
+            const detailValue = place.happyHourData[key] || 'N/A';
+            
+            // Convert key (e.g., 'details_monday') to readable title (e.g., 'Details Monday')
+            // This capitalizes the first letter and replaces underscores with spaces
+            let title = key.replace(/_/g, ' ').replace(/^./, str => str.toUpperCase());
+
+            // Optionally, skip keys if the value is empty or not useful
+            if (!detailValue || detailValue === '') continue;
+
+            detailsHtml += `<p class="happy-hour-detail">${title}: <strong>${detailValue}</strong></p>`;
+        }
+    }
+    // ---------------------------------
     
     item.innerHTML = `
-        <div class="listing-number">${index + 1}</div>
         <div class="listing-details">
-            <h5>${place.name}</h5>
+            <h5 class="restaurant-name">${place.name}</h5>
             <p class="listing-address">${place.formattedAddress || 'No address data'}</p>
+            ${detailsHtml}
         </div>
     `;
     
@@ -128,7 +172,7 @@ function createListingItem(place, index) {
 }
 
 
-// --- 4. DATA LOADING FUNCTION (FOCUS ON LOCAL FILES) ---
+// --- 4. DATA LOADING FUNCTION ---
 
 /**
  * Loads and parses the main.csv file, with a fallback to restaurants.csv.
@@ -194,8 +238,6 @@ async function loadMainCsvData() {
  */
 async function processAndMergeData(allRestaurantDetails) {
     
-    // Using an array map is sufficient here, no need for a dataMap lookup unless performance becomes an issue
-    
     const markerPromises = allRestaurantDetails.map(async (dataRow, index) => {
         const name = dataRow.Name || dataRow.restaurant_key;
         if (!name) return null;
@@ -203,8 +245,9 @@ async function processAndMergeData(allRestaurantDetails) {
         const place = new Place(name); 
         placeDataMap.set(name, place);
 
-        // A. Merge All Data
-        place.happyHourData = dataRow; 
+        // A. Merge All Data (UPDATED to use the new class)
+        // Pass the raw dataRow to the HappyHourData constructor for explicit mapping
+        place.happyHourData = new HappyHourData(dataRow); 
         
         // B. Load and PARSE Coordinates from the single 'coordinates' column (FIXED)
         let lat = null;
@@ -264,8 +307,6 @@ async function processAndMergeData(allRestaurantDetails) {
         const validMarkers = markers.filter(m => m !== null);
         if (validMarkers.length > 0) {
             markersLayer.addLayer(L.featureGroup(validMarkers));
-            // Optional: Auto-fit the map to all markers
-            // map.fitBounds(L.featureGroup(validMarkers).getBounds());
         }
     });
 }

@@ -1,0 +1,4 @@
+--- STARTING URL CACHING SCRIPT: Tue Oct 28 23:38:07 PDT 2025 ---
+Reading input from: restaurant-map/data/restaurants.csv (Single Column, All Rows)
+Writing cache to: restaurant-map/data/google_map_url.csv
+[INFO] Initialized restaurant-map/data/google_map_url.csv with header.

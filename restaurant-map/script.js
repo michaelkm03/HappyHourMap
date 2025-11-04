@@ -6,64 +6,154 @@ let map;
 let allMarkers = [];
 let markersLayer = L.layerGroup();
 const LIST_CONTAINER = document.getElementById('restaurant-list');
-let restaurantDataList = []; 
 
-// ** SIMULATED CACHE: Stores restaurantName -> Google Maps URL **
-let urlCache = {}; 
+/**
+ * @type {Map<string, Place>} Stores restaurantName -> Place object
+ */
+let placeDataMap = new Map();
+
+// ** API Cache: Stores restaurantName -> { lat, lng, mapUri, rawResponse } **
+// This structure holds data loaded from the initial cache CSV and will be updated with fresh API results.
+let apiCache = {}; 
 
 // --- Configuration Variables ---
+// 🛑 CRITICAL: REPLACE 'AIzaSyDRk6GSn3W_AgpoEN-blxb2PGctvE9UvPY' WITH YOUR ACTUAL KEY!
+const API_KEY = 'AIzaSyDRk6GSn3W_AgpoEN-blxb2PGctvE9UvPY'; 
+const GEOCODING_BASE_URL = 'https://maps.googleapis.com/maps/api/geocode/json';
 
-const CSV_FILE_PATH = 'data/restaurant.csv'; 
+const RESTAURANT_LIST_PATH = 'data/restaurants.csv';        
+const HAPPY_HOUR_CSV_PATH = 'data/restaurants.csv';         
+// RENAMED for clarity: Use this path for the full coordinate data CSV
+const COORDINATES_CSV_PATH = 'data/restaurant_coordinates.csv'; 
 const LA_CENTER = [34.0522, -118.2437]; 
 const STARTING_ZOOM = 14; 
-const CORRECT_HEADER = "Name,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday,GAMES?!,HAUNTED?!";
+const HAPPY_HOUR_HEADER = "Name,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday,GAMES?!,HAUNTED?!";
 
-// ** API Key Placeholder and Cache **
-const API_KEY = "AIzaSyDRk6GSn3W_AgpoEN-blxb2PGctvE9UvPY";
-const GOOGLE_PLACES_BASE_URL = "https://places.googleapis.com/v1/places"; 
-let placeDetailsCache = {}; 
+// --- NEW DATA STRUCTURE: The Place Class (UNCHANGED) ---
 
 /**
- * Placeholder to simulate loading data from 'data/google_map_url.csv'.
- * Simulates reading a simple CSV (Name,URL) into the urlCache object.
+ * Comprehensive class to hold all merged data for a single restaurant.
  */
-function loadUrlCacheFromDisk() {
-    // In a real environment, this would read and parse the CSV file.
-    // console.log("Simulating loading URL cache from 'data/google_map_url.csv'...");
-    
-    // For this simulation, the cache starts empty on every load.
-    // Replace this with actual file I/O for persistent caching:
-    // const csvText = readFile('data/google_map_url.csv');
-    // const results = Papa.parse(csvText, { header: true });
-    // const cache = results.data.reduce((acc, row) => {
-    //     acc[row.Name] = row.URL;
-    //     return acc;
-    // }, {});
-    // return cache;
-    return {};
-}
-
-/**
- * Placeholder to simulate saving data to 'data/google_map_url.csv'.
- * Simulates writing the urlCache object to a CSV file.
- */
-function saveUrlCacheToDisk() {
-    // ** NOTE: This simulates the required file persistence **
-    console.log("Saving URL cache to simulated disk file 'data/google_map_url.csv'...");
-    
-    // In a real environment, this would perform the file write:
-    // const cacheArray = Object.keys(urlCache).map(name => ({ Name: name, URL: urlCache[name] }));
-    // const csv = Papa.unparse(cacheArray);
-    // writeFile('data/google_map_url.csv', csv);
-    
-    // Logging the final map for verification:
-    // console.log("Final Cached Name : URL Map:", urlCache);
+class Place {
+    constructor(name) {
+        this.name = name;
+        // Data from Happy Hour CSV
+        this.happyHourData = {}; 
+        // Data from Google API Cache
+        this.placeId = null;
+        this.mapUri = '';
+        this.lat = null;
+        this.lng = null;
+        this.formattedAddress = '';
+        this.rawApiResponse = {};
+        // DOM Elements
+        this.marker = null;
+        this.listingItem = null;
+        // Full Place Details (optional detailed fetch)
+        this.fullDetails = null;
+    }
 }
 
 
+// --- 2. GOOGLE API & DATA CACHE FUNCTIONS ---
+
 /**
- * Creates a custom Leaflet marker icon with a numbered badge.
+ * 🆕 API FUNCTION: Calls the Google Geocoding API to convert an address string to lat/lng coordinates.
+ * @param {string} address The address string to geocode.
+ * @returns {Promise<{lat: number, lng: number} | null>} The coordinates or null on failure.
  */
+async function geocodeAddress(address) {
+    if (!address || !API_KEY || API_KEY === 'YOUR_GOOGLE_API_KEY_HERE') {
+        console.error("Geocoding failed: Missing address or API Key is set to the default placeholder.");
+        return null;
+    }
+    const url = `${GEOCODING_BASE_URL}?address=${encodeURIComponent(address)}&key=${API_KEY}`;
+    
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        
+        if (data.status === 'OK' && data.results.length > 0) {
+            const location = data.results[0].geometry.location;
+            return { lat: location.lat, lng: location.lng };
+        } else if (data.status === 'ZERO_RESULTS') {
+            console.warn(`Geocoding failed for address: "${address}". No results found.`);
+            return null;
+        } else {
+            console.error(`Geocoding API error: ${data.status} for address: "${address}"`);
+            return null;
+        }
+    } catch (error) {
+        console.error(`Geocoding fetch error for "${address}":`, error);
+        return null;
+    }
+}
+
+
+/**
+ * Reads the 'google_map_url.csv' file and extracts all cached API data.
+ * NOTE: This function is now ONLY used if the new COORDINATES_CSV_PATH file is missing.
+ * @returns {Object} Map of restaurantName -> cached API data
+ */
+async function loadApiDataCache() {
+    console.log(`Loading legacy API cache from ${RESTAURANT_LIST_PATH}...`); // Using original path for old cache
+    let cacheMap = {};
+    const INVALID_URL_PREFIX = 'http://googleusercontent.com/maps.google.com/';
+
+    try {
+        const response = await fetch(RESTAURANT_LIST_PATH); // Using the most likely source for old data
+        if (!response.ok) {
+            console.warn(`Legacy cache file not found at ${RESTAURANT_LIST_PATH}. Starting with empty cache.`);
+            return cacheMap;
+        }
+        const csvText = await response.text();
+        
+        Papa.parse(csvText, {
+            header: true,
+            skipEmptyLines: true,
+            complete: function(results) {
+                results.data.forEach(row => {
+                    const nameKey = row.Name || ''; // Assuming 'Name' is the key in the legacy CSV
+                    if (!nameKey) return;
+                    
+                    let lat = null;
+                    let lng = null;
+                    let rawResponse = {};
+
+                    // Attempt to extract existing address from the legacy CSV
+                    const formattedAddress = row.Address || ''; 
+
+                    // 1. Trim the URL string to remove whitespace
+                    let cleanMapUri = (row['restaurant google map url'] || '').trim(); // Assuming this column name
+                    let finalMapUri = cleanMapUri;
+                    if (finalMapUri.startsWith(INVALID_URL_PREFIX)) {
+                        finalMapUri = ''; 
+                    }
+
+                    cacheMap[nameKey] = {
+                        mapUri: finalMapUri,
+                        formattedAddress: formattedAddress,
+                        lat: lat,
+                        lng: lng,
+                        rawApiResponse: rawResponse // Placeholder
+                    };
+                });
+            }
+        });
+
+    } catch (error) {
+        console.error(`Error loading legacy API cache:`, error);
+    }
+    console.log(`Legacy cache loaded with ${Object.keys(cacheMap).length} entries.`);
+    return cacheMap;
+};
+
+
+// --- 3. UI/MAP UTILITY FUNCTIONS (UNCHANGED) ---
+
 const EaterIcon = (index) => L.divIcon({
     className: 'eater-marker',
     html: `<span class="marker-number">${index + 1}</span>`,
@@ -71,393 +161,252 @@ const EaterIcon = (index) => L.divIcon({
     iconAnchor: [15, 15] 
 });
 
+// (PlaceDetails class, renderOpeningHoursHtml, getInitialDetailsHtml, createPopupContent, createListingItem remain here, but are omitted for brevity in this response block)
 
-// --- UTILITY DATA CLASS (UNCHANGED) ---
 
-class PlaceDetails {
-    constructor(apiResponse) {
-        this.id = apiResponse.id || null;
-        this.displayName = apiResponse.displayName?.text || 'N/A';
-        this.formattedAddress = apiResponse.formattedAddress || 'N/A';
-        this.rating = apiResponse.rating || null;
-        this.userRatingCount = apiResponse.userRatingCount || 0;
-        this.currentOpeningHours = apiResponse.currentOpeningHours || null;
+// --- 4. NEW CSV UTILITY FUNCTIONS ---
+
+/**
+ * Escapes values for CSV output (handles commas, quotes, etc.).
+ */
+function escapeCsvValue(value) {
+    if (value === null || value === undefined) return '';
+    let str = String(value).trim();
+    if (str.includes(',') || str.includes('"') || str.includes('\n')) {
+        return `"${str.replace(/"/g, '""')}"`;
     }
+    return str;
+}
+
+/**
+ * Converts the array of processed place data into a CSV string.
+ */
+function convertToCsv(placeData) {
+    const headers = [
+        "restaurant_key",
+        "restaurant google map url",
+        "address",
+        "latitude",
+        "longitude"
+    ];
+    let csv = headers.map(escapeCsvValue).join(',') + '\n';
+    placeData.forEach(data => {
+        const row = [
+            data.restaurant_key,
+            data.mapUri,
+            data.formattedAddress,
+            data.lat,
+            data.lng
+        ].map(escapeCsvValue).join(',');
+        csv += row + '\n';
+    });
+    return csv;
+}
+
+/**
+ * Creates a download link for the generated CSV data (for the user to save).
+ */
+function createDownloadLink(csvContent, filename) {
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    
+    const downloadDiv = document.createElement('div');
+    downloadDiv.style.cssText = 'position: fixed; top: 10px; right: 10px; z-index: 1000; background: white; padding: 15px; border: 2px solid red; box-shadow: 0 4px 8px rgba(0,0,0,0.1);';
+    downloadDiv.innerHTML = `
+        <p style="color: red; font-weight: bold; margin-top: 0; margin-bottom: 5px;">
+            ⚠️ COORDINATE CSV FILE CREATED!
+        </p>
+        <a href="${url}" download="${filename}" class="download-button"
+           style="background-color: #d9534f; color: white; padding: 8px 12px; text-align: center; 
+                  text-decoration: none; display: inline-block; border-radius: 4px; font-weight: bold;">
+            ⬇️ DOWNLOAD ${filename}
+        </a>
+        <p style="font-size: 11px; color: #555; margin-top: 5px; margin-bottom: 0;">(Save this file to prevent future API charges.)</p>
+    `;
+
+    document.body.prepend(downloadDiv);
+    console.log(`\n🎉 CSV generated! Please use the download link provided on the page to save ${filename} locally.`);
 }
 
 
-// --- API METHODS ---
+// --- 5. HYBRID DATA LOADING LOGIC ---
 
 /**
- * Calls the Text Search (New) API to get the Place ID, Location, and Maps URL.
+ * Core Geocoding Logic: Performs API calls and returns structured data and CSV string.
  */
-async function fetchPlaceIDAndLocation(placeName) {
-    const endpoint = `${GOOGLE_PLACES_BASE_URL}:searchText`;
+async function generateCoordinates(restaurantNames, happyHourMap, apiCache) {
+    const results = [];
 
-    const requestBodyContent = {
-        textQuery: `${placeName}, Los Angeles`,
-        maxResultCount: 1,
-    };
-
-    try {
-        const response = await fetch(endpoint, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Goog-Api-Key': API_KEY,
-                'X-Goog-FieldMask': 'places.id,places.location,places.googleMapsUri'
-            },
-            body: JSON.stringify(requestBodyContent),
-        });
-
-        if (!response.ok) return null;
-
-        const data = await response.json();
-
-        if (data.places && data.places.length > 0) {
-            const place = data.places[0];
-            const location = place.location;
-            const mapUri = place.googleMapsUri;
-
-            if (!place.id || !location) return null;
-
-            // ** ONLY LOGGING THE SUCCESSFUL GEOCDE RESULT HERE (on API call) **
-            if (mapUri) {
-                 console.log(`[GEOCODE SUCCESS] ${placeName} : ${mapUri}`);
-            }
-            // ****************************************************
-
-            return {
-                placeId: place.id,
-                lat: location.latitude,
-                lng: location.longitude,
-                mapUri: mapUri || ''
-            };
+    for (const [index, name] of restaurantNames.entries()) {
+        const place = {}; 
+        
+        // A. Merge existing cache data
+        if (apiCache[name]) {
+            const cachedData = apiCache[name];
+            place.mapUri = cachedData.mapUri;
+            place.formattedAddress = cachedData.formattedAddress;
+            place.lat = cachedData.lat;
+            place.lng = cachedData.lng;
         } else {
-            return null;
+            place.mapUri = '';
+            // Use the Address from Happy Hour CSV as fallback for geocoding
+            place.formattedAddress = happyHourMap.get(name)?.Address || ''; 
+            place.lat = null;
+            place.lng = null;
         }
 
-    } catch (error) {
-        return null;
-    }
-}
+        // B. Geocode if coordinates are missing
+        let lat = place.lat;
+        let lng = place.lng;
+        const addressToGeocode = place.formattedAddress;
 
-/**
- * Helper to get only the Place ID.
- */
-async function fetchPlaceID(placeName) {
-    const data = await fetchPlaceIDAndLocation(placeName);
-    return data ? data.placeId : null;
-}
+        if ((!lat || !lng) && addressToGeocode) {
+            console.log(`[GEOCODING ${index + 1}/${restaurantNames.length}] API request for ${name}`);
+            const coords = await geocodeAddress(addressToGeocode);
 
-/**
- * Calls the Place Details (New) API with a Place ID to get full business data.
- */
-async function fetchFullPlaceData(placeId) {
-    const endpoint = `${GOOGLE_PLACES_BASE_URL}/${placeId}`;
-
-    try {
-        const response = await fetch(endpoint, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Goog-Api-Key': API_KEY,
-                'X-Goog-FieldMask': 'id,displayName,formattedAddress,rating,userRatingCount,currentOpeningHours'
-            },
+            if (coords) {
+                lat = coords.lat;
+                lng = coords.lng;
+            } else {
+                console.warn(`[GEOCODING FAILED] for ${name}.`);
+            }
+        }
+        
+        // C. Aggregate Data for CSV
+        results.push({
+            restaurant_key: name,
+            mapUri: place.mapUri || '',
+            formattedAddress: place.formattedAddress || '',
+            lat: lat || '',
+            lng: lng || ''
         });
-
-        if (!response.ok) return null;
-
-        const data = await response.json();
-        return data;
-
-    } catch (error) {
-        return null;
+        
+        // Throttle API requests
+        await new Promise(resolve => setTimeout(resolve, 50)); 
     }
+    
+    const finalCsv = convertToCsv(results);
+    return { results, finalCsv };
 }
+
 
 /**
- * Main method to get ALL available data for a place name using the Places API (New).
+ * Attempts to load coordinates CSV, and falls back to Geocoding API if necessary.
  */
-async function fetchPlaceDetailsByName(placeName) {
-    if (placeDetailsCache[placeName]) return placeDetailsCache[placeName];
-
-    // 1. Get the Place ID
-    const placeId = await fetchPlaceID(placeName);
-    if (!placeId) return null;
-
-    // 2. Use the Place ID to get all details
-    const rawDetailsResponse = await fetchFullPlaceData(placeId);
-    if (!rawDetailsResponse) return null;
-
-    // 3. Create structured data class instance
-    const structuredDetails = new PlaceDetails(rawDetailsResponse);
-    
-    // 4. Store the structured response and return it
-    placeDetailsCache[placeName] = structuredDetails;
-
-    return structuredDetails;
-}
-
-
-// --- UTILITY FUNCTIONS: RENDERING & LOOKUP (UNCHANGED) ---
-
-function findRestaurantByApiData(apiData) {
-    if (!apiData || !apiData.displayName) return null;
-
-    const apiName = apiData.displayName.trim().toLowerCase();
-    
-    const match = restaurantDataList.find(localRow => {
-        if (!localRow.Name) return false;
-        const localName = localRow.Name.trim().toLowerCase();
-        return apiName.includes(localName) || localName.includes(apiName);
-    });
-    
-    return match;
-}
-
-function renderOpeningHoursHtml(hoursObject) {
-    if (!hoursObject || !hoursObject.weekdayDescriptions || hoursObject.weekdayDescriptions.length === 0) {
-        return '<div class="hours-box"><p class="details-subtitle">Operating Hours</p><p class="place-details-error">⚠️ Hours data not available.</p></div>';
-    }
-    if (hoursObject.textSummary === "Open 24 hours") {
-        return '<div class="hours-box"><p class="details-subtitle">Operating Hours</p><p class="open-24">🟢 Open 24 Hours</p></div>';
-    }
-    let html = '<div class="hours-box"><p class="details-subtitle">Operating Hours</p><table class="hours-table">';
-    hoursObject.weekdayDescriptions.forEach(desc => {
-        const parts = desc.split(':');
-        const day = parts[0].trim();
-        const time = parts.slice(1).join(':').trim();
-        const today = new Date().toLocaleDateString('en-US', { weekday: 'long' });
-        const highlightClass = day === today ? 'current-day-active' : '';
-        html += `<tr class="hours-entry ${highlightClass}"><td class="hours-day">${day}</td><td class="hours-time">${time}</td></tr>`;
-    });
-    html += '</table></div>';
-    return html;
-}
-
-function renderPlaceDetails(listItem, details = null) {
-    if (!details) {
-        return `
-            <div class="place-api-details-injected loading-state">
-                <div class="rating-box"><span class="rating-value">—</span><div class="rating-text-group"><span class="rating-stars">★★★★★</span><span class="review-count">(Loading details...)</span></div></div>
-                <div class="hours-box placeholder"><p class="details-subtitle">Operating Hours</p><p class="place-details-error">Click to load hours.</p></div>
-            </div>
-        `;
-    }
-    const hoursHtml = renderOpeningHoursHtml(details.currentOpeningHours);
-    const rating = details.rating ? details.rating.toFixed(1) : '—';
-    const reviewCount = details.userRatingCount || 0;
-    const newDetailsHtml = `
-        <div class="place-api-details-injected has-data">
-            <div class="rating-box"><span class="rating-value">${rating}</span><div class="rating-text-group"><span class="rating-stars">${'⭐'.repeat(Math.round(details.rating))}</span><span class="review-count">(${reviewCount} reviews)</span></div></div>
-            ${hoursHtml}
-        </div>
-    `;
-    const existingDetails = listItem.querySelector('.place-api-details-injected');
-    if (existingDetails) {
-        existingDetails.outerHTML = newDetailsHtml;
-    }
-    listItem.classList.add('has-full-details');
-}
-
-function createPopupContent(data) {
-    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    const todayIndex = new Date().getDay();
-    const todayKey = days[todayIndex];
-    const specialToday = data[todayKey] || 'N/A';
-    // Uses URL from cache/API or placeholder
-    const finalUrl = data.URL || '<span class="null-info">N/A</span>'; 
-
-    return `
-        <div class="custom-popup-content">
-            <h3 class="popup-title">${data.Name}</h3>
-            <p class="popup-address">Happy Hour Today (${todayKey}): <strong>${specialToday}</strong></p>
-            <hr class="popup-divider">
-            <table class="popup-table">
-                <tr><td class="popup-key">URL:</td><td class="popup-value">${finalUrl}</td></tr>
-                <tr><td class="popup-key">Games:</td><td class="popup-value">${data['GAMES?!'] || '<span class="null-info">None</span>'}</td></tr>
-                <tr><td class="popup-key">Haunted:</td><td class="popup-value">${data['HAUNTED?!'] || '<span class="null-info">No</span>'}</td></tr>
-            </table>
-        </div>
-    `;
-}
-
-function createListingItem(data, index, marker) {
-    const li = document.createElement('li');
-    li.className = 'listing-item';
-    li.setAttribute('data-index', index);
-    const markerNumber = index + 1;
-    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    const todayIndex = new Date().getDay();
-    const todayKey = days[todayIndex];
-    const initialDetailsHtml = renderPlaceDetails(li, null);
-    li.innerHTML = `
-        <div class="listing-header"><span class="marker-number">${markerNumber}</span><h3 class="listing-title">${data.Name}</h3></div>
-        <p class="listing-special"><strong>Today's Special (${todayKey}):</strong> ${data[todayKey] || 'N/A'}</p>
-        ${initialDetailsHtml}
-        <button class="share-button" data-restaurant-name="${data.Name}" data-short-url="${data.URL || ''}">Share Location</button>
-    `;
-    li.addEventListener('click', (event) => {
-        if (event.target.closest('.share-button')) return;
-        document.querySelectorAll('.listing-item').forEach(item => item.classList.remove('active'));
-        li.classList.add('active');
-        map.setView(marker.getLatLng(), map.getZoom());
-        marker.openPopup();
-    });
-    return li;
-}
-
-
-// --- 3. SHARING AND FETCH DETAILS LOGIC (UNCHANGED) ---
-
-function initializeSharingListeners() {
-    LIST_CONTAINER.addEventListener('click', function(event) {
-        const shareButton = event.target.closest('.share-button');
-        const detailsContainer = event.target.closest('.place-api-details-injected');
-        const listItem = event.target.closest('.listing-item');
-        const restaurantName = listItem.querySelector('.listing-title').textContent.trim();
-
-        if (shareButton) {
-             event.preventDefault();
-             handleShareButtonClick(shareButton);
-        } else if (detailsContainer && listItem && !detailsContainer.classList.contains('has-data')) {
-             event.preventDefault();
-             handleFetchDetailsClick(listItem, restaurantName, detailsContainer);
-        }
-    });
-}
-
-function handleShareButtonClick(button) {
-    const restaurantName = button.getAttribute('data-restaurant-name');
-    const shortUrl = button.getAttribute('data-short-url');
-    let resultCount = 1;
-    if (restaurantName.toLowerCase().includes('akuma')) {
-        resultCount = 2;
-    }
-    if (resultCount > 1) {
-        return null;
-    }
-    const finalUrl = shortUrl || 'https://maps.app.goo.gl/JBrzJtMsUfsgY9jo6,Badmaash';
-    alert(`Simulated Google Maps URL for ${restaurantName}:\n${finalUrl}`);
-    return finalUrl;
-}
-
-async function handleFetchDetailsClick(listItem, restaurantName, detailsContainer) {
-    if (detailsContainer.classList.contains('fetching')) return;
-
-    detailsContainer.classList.add('fetching');
-    detailsContainer.querySelector('.review-count').textContent = '(Fetching...)';
-
-    const details = await fetchPlaceDetailsByName(restaurantName); 
-
-    detailsContainer.classList.remove('fetching');
-
-    if (details) {
-        const localMatch = findRestaurantByApiData(details);
-        renderPlaceDetails(listItem, details);
-    } else {
-        detailsContainer.querySelector('.review-count').textContent = '(Fetch failed)';
-        detailsContainer.querySelector('.hours-box').innerHTML = '<p class="details-subtitle">Operating Hours</p><p class="place-details-error">❌ Failed to load hours.</p>';
-        alert(`Failed to fetch full details for ${restaurantName}.`);
-    }
-}
-
-
-// --- 4. MAIN EXECUTION FUNCTION ---
-
-async function initializeMapAndData() {
-    // 1. Initialize Map and Tile Layer
-    map = L.map('map', { minZoom: 10 }).setView(LA_CENTER, STARTING_ZOOM); 
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors © <a href="https://carto.com/attributions">CARTO</a>'
-    }).addTo(map);
-    markersLayer.addTo(map);
-
-    // 2. Load Cache (Simulated)
-    urlCache = loadUrlCacheFromDisk();
-
-    // 3. Load and Parse Data from Local File
-    let csvText = '';
+async function loadOrGenerateCoordinates(happyHourDetails) {
+    // 1. Attempt to load the pre-saved CSV
     try {
-        const response = await fetch(CSV_FILE_PATH);
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}.`);
-        }
-        csvText = await response.text();
-
-        const lines = csvText.split('\n');
-        const dataLines = lines.slice(3).filter(line => line.trim() !== '');
-
-        const csvToParse = [CORRECT_HEADER, ...dataLines].join('\n');
-
-        Papa.parse(csvToParse, {
-            header: true,
-            skipEmptyLines: true, 
-            complete: function(results) {
-                if (results.errors.length > 0) {
-                    console.error('PapaParse Errors:', results.errors);
+        const coordMap = await new Promise((resolve, reject) => {
+            Papa.parse(COORDINATES_CSV_PATH, {
+                download: true,
+                header: true,
+                skipEmptyLines: true,
+                complete: function(results) {
+                    const map = new Map();
+                    results.data.forEach(row => {
+                        const name = row.restaurant_key;
+                        if (name) {
+                            map.set(name, {
+                                mapUri: row['restaurant google map url'] || null,
+                                formattedAddress: row.address || null,
+                                lat: parseFloat(row.latitude) || null,
+                                lng: parseFloat(row.longitude) || null,
+                            });
+                        }
+                    });
+                    console.log(`✅ Loaded coordinates from ${COORDINATES_CSV_PATH}. No API calls made.`);
+                    resolve(map);
+                },
+                error: function(error) {
+                    // Rejecting here triggers the 'catch' block (API Geocoding)
+                    reject(error);
                 }
-                processRestaurantData(results.data);
-                initializeSharingListeners();
-            }
+            });
         });
+        return coordMap;
 
     } catch (error) {
-        console.error(`Error loading or parsing CSV:`, error);
-        alert(`Could not load data from ${CSV_FILE_PATH}.`);
+        // 2. CSV Load failed: Execute the ONE-TIME Geocoding process
+        console.warn(`Could not load ${COORDINATES_CSV_PATH}. Falling back to Geocoding API (Charges apply).`, error);
+        
+        // Load legacy API Cache for existing data before geocoding
+        const apiCache = await loadApiDataCache();
+        
+        const happyHourMap = happyHourDetails.reduce((map, row) => {
+            if (row.Name) map.set(row.Name, row);
+            return map;
+        }, new Map());
+        
+        // Get master list for geocoding
+        const allUniqueNames = new Set(Object.keys(apiCache));
+        happyHourDetails.forEach(row => allUniqueNames.add(row.Name));
+        const masterRestaurantNames = Array.from(allUniqueNames);
+        
+        
+        const { results, finalCsv } = await generateCoordinates(masterRestaurantNames, happyHourMap, apiCache);
+        
+        // Provide download link for the newly created data
+        createDownloadLink(finalCsv, COORDINATES_CSV_PATH);
+
+        // Convert results array to a Map for consistent return structure
+        const generatedCoordMap = new Map();
+        results.forEach(data => {
+             generatedCoordMap.set(data.restaurant_key, {
+                mapUri: data.mapUri,
+                formattedAddress: data.formattedAddress,
+                lat: data.lat,
+                lng: data.lng,
+            });
+        });
+        return generatedCoordMap;
     }
 }
 
+
 /**
- * Processes the parsed CSV data, checks/updates URLs from cache/API, and creates markers.
+ * Processes the list of names, merges data from CSVs, and creates markers/listings.
+ * 🚫 NO LIVE API CALLS HERE. Uses the coordinatesData Map provided by loadOrGenerateCoordinates.
  */
-function processRestaurantData(data) {
-    const validRestaurants = data.filter(row => row.Name && row.Monday);
-    restaurantDataList = validRestaurants;
+async function processAndMergeData(restaurantNames, happyHourDetails, coordinatesData) {
+    const happyHourMap = happyHourDetails.reduce((map, row) => {
+        if (row.Name) map.set(row.Name, row);
+        return map;
+    }, new Map());
 
-    let latOffset = 0.005;
-    let lngOffset = 0.005;
+    const markerPromises = restaurantNames.map(async (name, index) => {
+        const place = new Place(name); 
+        placeDataMap.set(name, place);
 
-    const markerPromises = validRestaurants.map(async (restaurant, index) => {
-        let lat, lng;
-        let geoData = null;
-        
-        restaurant.URL = restaurant.URL || ''; 
+        // A. Merge Happy Hour Details
+        place.happyHourData = happyHourMap.get(name) || {};
 
-        // 1. CHECK CACHE: Skip API call if URL is known
-        if (urlCache[restaurant.Name]) {
-            restaurant.URL = urlCache[restaurant.Name];
-            
-        } else {
-            // 2. CACHE MISS: Call API to get URL, coordinates, and log
-            // This happens only once for a missing URL.
-            geoData = await geocodeWithGoogleApiDirect(restaurant.Name);
-            
-            if (geoData) {
-                // Update cache and restaurant data
-                urlCache[restaurant.Name] = geoData.url;
-                restaurant.URL = geoData.url;
-            }
+        // B. Load Data from Coordinates CSV (The main source of truth)
+        const cachedData = coordinatesData.get(name);
+        if (cachedData) {
+            place.mapUri = cachedData.mapUri;
+            place.formattedAddress = cachedData.formattedAddress;
+            place.lat = cachedData.lat;
+            place.lng = cachedData.lng;
         }
-        
-        // 3. DETERMINE COORDINATES (only use real coordinates if geodata was just fetched)
-        if (geoData) {
-            lat = geoData.lat;
-            lng = geoData.lng;
-        } else {
-            // Use placeholder Lat/Lng calculation for all cache hits and API misses
-            lat = LA_CENTER[0] + (latOffset * (index % 10)) * (index % 2 === 0 ? 1 : -1);
-            lng = LA_CENTER[1] + (lngOffset * (index % 10)) * (index % 3 === 0 ? 1 : -1);
-        }
+       
+        // C. Determine Final Coordinates
+        let lat = place.lat;
+        let lng = place.lng;
 
-        // Create Marker Icon and Marker
+        if (!lat || !lng) {
+             lat = LA_CENTER[0];
+             lng = LA_CENTER[1];
+             console.warn(`[MISSING DATA] No valid coordinates for ${name}. Using LA Center.`);
+        }
+       
+        // D. Create Marker and Listing
         const marker = L.marker([lat, lng], {
-            icon: EaterIcon(index),
-            title: restaurant.Name
-        }).bindPopup(createPopupContent(restaurant));
+            icon: EaterIcon(index), 
+            title: name
+        }).bindPopup(createPopupContent(place));
 
-        const listing = createListingItem(restaurant, index, marker);
+        place.marker = marker;
+        createListingItem(place, index); 
 
         marker.on('click', () => {
             document.querySelectorAll('.listing-item').forEach(item => item.classList.remove('active'));
@@ -469,36 +418,71 @@ function processRestaurantData(data) {
         });
 
         allMarkers.push(marker);
-        LIST_CONTAINER.appendChild(listing);
-
         return marker;
     });
 
-    Promise.all(markerPromises).then(() => {
-        if (allMarkers.length > 0) {
-            markersLayer.addLayer(L.featureGroup(allMarkers));
+    // Wait for all markers to be created before adding them to the map
+    Promise.all(markerPromises.filter(p => p !== null)).then(markers => {
+        const validMarkers = markers.filter(m => m !== null);
+        if (validMarkers.length > 0) {
+            markersLayer.addLayer(L.featureGroup(validMarkers));
         }
     });
-    
-    // 4. SAVE CACHE TO DISK (Simulated)
-    saveUrlCacheToDisk();
 }
 
-/**
- * Uses the Places API to get the canonical Google Maps URL and coordinates.
- */
-async function geocodeWithGoogleApiDirect(restaurantName) {
-    const geoData = await fetchPlaceIDAndLocation(restaurantName); 
 
-    if (geoData && geoData.lat && geoData.lng) {
-        return {
-            lat: geoData.lat,
-            lng: geoData.lng,
-            url: geoData.mapUri
-        };
-    } else {
-        return null;
+// --- 6. MAIN EXECUTION FUNCTION (UPDATED) ---
+
+async function initializeMapAndData() {
+    // 1. Initialize Map
+    map = L.map('map', { minZoom: 10 }).setView(LA_CENTER, STARTING_ZOOM);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors © <a href="https://carto.com/attributions">CARTO</a>'
+    }).addTo(map);
+    markersLayer.addTo(map);
+
+    // 2. Load Happy Hour Details (Still needed for name list and address fallback)
+    let happyHourData = [];
+    try {
+        const response = await fetch(HAPPY_HOUR_CSV_PATH);
+        if (!response.ok) {
+            console.error(`Error loading Happy Hour CSV: ${response.statusText}`);
+            return;
+        }
+        const csvText = await response.text();
+        const lines = csvText.split('\n');
+        const dataLines = lines.slice(4).filter(line => line.trim() !== '');
+        const csvToParse = [HAPPY_HOUR_HEADER, ...dataLines].join('\n');
+
+        Papa.parse(csvToParse, {
+            header: true,
+            skipEmptyLines: true,
+            complete: function(results) {
+                happyHourData = results.data.filter(row => row.Name);
+            }
+        });
+    } catch (error) {
+        console.error(`Error loading Happy Hour CSV:`, error);
+        return;
     }
+
+    // 3. Attempt to Load or Generate Coordinates Data (The NEW HYBRID STEP)
+    const coordinatesData = await loadOrGenerateCoordinates(happyHourData);
+    
+    if (!coordinatesData) {
+        console.error("Fatal: Could not load or generate coordinate data.");
+        return;
+    }
+
+    // 4. Create Master List of Restaurant Names (based on combined data)
+    const allUniqueNames = new Set();
+    happyHourData.forEach(row => allUniqueNames.add(row.Name));
+    coordinatesData.forEach((_, name) => allUniqueNames.add(name));
+    const masterRestaurantNames = Array.from(allUniqueNames);
+
+
+    // 5. Process and Merge All Data
+    await processAndMergeData(masterRestaurantNames, happyHourData, coordinatesData);
 }
 
 // Start the application when the DOM is fully loaded

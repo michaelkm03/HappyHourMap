@@ -13,14 +13,11 @@ const LIST_CONTAINER = document.getElementById('restaurant-list');
 let placeDataMap = new Map();
 
 // --- Configuration Variables ---
-// ❌ API key and Geocoding URL removed. Relying entirely on local CSV data.
 
-const RESTAURANTS_CSV_PATH = 'data/restaurants.csv'; 
 const MAIN_CSV_PATH = 'data/main.csv'; 
 
 const LA_CENTER = [34.0522, -118.2437]; 
-const STARTING_ZOOM = 14; 
-// Header is kept for reference only
+const STARTING_ZOOM = 12; 
 const HAPPY_HOUR_HEADER = "Name,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday,GAMES?!,HAUNTED?!,address,restaurant google map url,coordinates"; 
 
 
@@ -31,7 +28,6 @@ const HAPPY_HOUR_HEADER = "Name,Monday,Tuesday,Wednesday,Thursday,Friday,Saturda
  */
 class HappyHourData {
     constructor(dataRow = {}) {
-        // Map CSV column names to properties, using an empty string as a safe fallback
         this.details_monday = dataRow.details_monday || '';
         this.details_tuesday = dataRow.details_tuesday || '';
         this.details_wednesday = dataRow.details_wednesday || '';
@@ -53,13 +49,13 @@ class HappyHourData {
 class Place {
     constructor(name) {
         this.name = name;
-        // 🆕 Now initializes a separate class instance
         this.happyHourData = new HappyHourData(); 
         this.placeId = null;
         this.mapUri = '';
         this.lat = null;
         this.lng = null;
         this.formattedAddress = '';
+        this.neighborhood = ''; // Added property
         this.rawApiResponse = {};
         this.marker = null;
         this.listingItem = null;
@@ -71,58 +67,23 @@ class Place {
 // --- 3. UI/MAP UTILITY FUNCTIONS ---
 
 const EaterIcon = (index) => L.divIcon({
-    // UPDATED: Removed the number for a simple map dot
     className: 'eater-marker',
     html: '', 
     iconSize: [15, 15],
-    iconAnchor: [7, 7]  
+    iconAnchor: [7, 7]  
 });
 
 /**
  * Creates the HTML content for a Leaflet marker popup.
- * @param {Place} place The Place object containing restaurant data.
- * @returns {string} HTML string for the popup.
  */
 function createPopupContent(place) {
     let content = `
         <div class="popup-content">
-            <h4 style="margin-top:0;">${place.name}</h4>
-            <p>${place.formattedAddress || 'Address not available'}</p>
+            <h4 class="popup-title">${place.name}</h4>
+            <p class="popup-address">${place.formattedAddress || 'Address not available'}</p>
+            <hr class="popup-divider">
     `;
 
-    // Add map link if available
-    if (place.mapUri) {
-        // Clean up legacy URL prefixes if present
-        const cleanUri = place.mapUri.replace('http://googleusercontent.com/maps.google.com/', '');
-        content += `<p><a href="${cleanUri}" target="_blank">View on Google Maps</a></p>`;
-    }
-
-    // Display a sample of happy hour data using the new structure
-    const mondayData = place.happyHourData.details_monday || 'N/A';
-    content += `<p><strong>Monday Happy Hour:</strong> ${mondayData}</p>`;
-    
-    content += `</div>`;
-    return content;
-}
-
-
-// --- 3. UI/MAP UTILITY FUNCTIONS (UPDATED createListingItem) ---
-
-/**
- * Creates the sidebar listing item for a restaurant and attaches map interaction handlers.
- */
-function createListingItem(place, index) {
-    // Console logs for debugging the new structure (kept for your reference)
-    console.log(`Creating listing item for: ${place.name}`);
-    console.log("Happy Hour Data Object:", place.happyHourData);
-    
-    if (!LIST_CONTAINER) return;
-
-    const item = document.createElement('div');
-    item.className = 'listing-item';
-    item.setAttribute('data-index', index);
-
-    // --- Dynamic Content Generation ---
     let detailsHtml = '';
     
     // Loop through every key in the HappyHourData object
@@ -131,25 +92,75 @@ function createListingItem(place, index) {
             const detailValue = place.happyHourData[key] || 'N/A';
             
             // Convert key (e.g., 'details_monday') to readable title (e.g., 'Details Monday')
-            // This capitalizes the first letter and replaces underscores with spaces
             let title = key.replace(/_/g, ' ').replace(/^./, str => str.toUpperCase());
 
             // Optionally, skip keys if the value is empty or not useful
-            if (!detailValue || detailValue === '') continue;
+            if (!detailValue || detailValue === 'N/A' || detailValue.trim() === '') continue;
 
-            detailsHtml += `<p class="happy-hour-detail">${title}: <strong>${detailValue}</strong></p>`;
+            // Use the CSS classes defined for the popup styles
+            detailsHtml += `<p class="popup-happy-hour-detail"><span class="popup-key">${title}:</span> <strong class="popup-value">${detailValue}</strong></p>`;
         }
     }
-    // ---------------------------------
+    content += detailsHtml;
+
+    // Add map link if available
+    if (place.mapUri) {
+        // Clean up legacy URL prefixes if present
+        const cleanUri = place.mapUri.replace('http://googleusercontent.com/maps.google.com/', '');
+        content += `<p style="margin-top: 10px;"><a href="${cleanUri}" target="_blank">View on Google Maps</a></p>`;
+    }
     
+    content += `</div>`;
+    return content;
+}
+
+
+/**
+ * Creates the sidebar listing item for a restaurant and attaches map interaction handlers.
+ */
+function createListingItem(place, index) {
+    
+    if (!LIST_CONTAINER) return;
+
+    // --- 1. Determine Current Day and Corresponding Key ---
+    const today = new Date();
+    // Using current local time: 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+    const dayIndex = today.getDay(); 
+    const dayKeys = [
+        'details_sunday', 'details_monday', 'details_tuesday', 
+        'details_wednesday', 'details_thursday', 'details_friday', 'details_saturday'
+    ];
+    
+    const currentDayKey = dayKeys[dayIndex];
+    const currentDayDetail = place.happyHourData[currentDayKey] || 'N/A';
+
+    // Format the key into a readable title (e.g., "details_tuesday" -> "Tuesday HH")
+    const dayTitle = currentDayKey
+        .replace('details_', '')
+        .replace(/^./, str => str.toUpperCase()) + ' HH'; 
+    // ---------------------------------------------------
+
+    const item = document.createElement('div');
+    item.className = 'listing-item';
+    item.setAttribute('data-index', index);
+    
+    // START: CLEANER, LARGER, UPDATED HTML STRUCTURE
     item.innerHTML = `
         <div class="listing-details">
             <h5 class="restaurant-name">${place.name}</h5>
-            <p class="listing-address">${place.formattedAddress || 'No address data'}</p>
-            ${detailsHtml}
-        </div>
+            
+            <p class="listing-neighborhood">
+                <span class="neighborhood-tag">📍 ${place.neighborhood || 'LA Area'}</span>
+            </p>
+            
+            <p class="happy-hour-details">
+                <span class="icon-flair">🍹</span> **${dayTitle}**: <strong>${currentDayDetail}</strong>
+            </p>
+            
+            </div>
     `;
-    
+    // END: CLEANER, LARGER, UPDATED HTML STRUCTURE
+
     // Add click handler to zoom to the marker
     item.addEventListener('click', () => {
         // Center the map on the marker location
@@ -172,16 +183,99 @@ function createListingItem(place, index) {
 }
 
 
+/**
+ * Extracts unique, non-empty, and sorted neighborhood names from all Place objects.
+ * @param {Map<string, Place>} placeMap Map of all place objects.
+ * @returns {Array<string>} A sorted array of unique neighborhood names.
+ */
+function getUniqueNeighborhoods(placeMap) {
+    const neighborhoods = new Set();
+    placeDataMap.forEach(place => {
+        if (place.neighborhood && place.neighborhood.trim() !== '') {
+            neighborhoods.add(place.neighborhood.trim());
+        }
+    });
+    return Array.from(neighborhoods).sort();
+}
+
+/**
+ * Filters the map markers and sidebar listings based on the selected neighborhood.
+ * @param {string} selectedNeighborhood The neighborhood to filter by (or "all").
+ */
+function filterPlaces(selectedNeighborhood) {
+    let activeMarkers = [];
+    
+    placeDataMap.forEach(place => {
+        const isMatch = (selectedNeighborhood === 'all' || place.neighborhood === selectedNeighborhood);
+
+        if (place.marker) {
+            if (isMatch) {
+                // Show marker by adding it to the temporary array
+                activeMarkers.push(place.marker);
+            }
+        }
+        
+        // Toggle sidebar visibility
+        if (place.listingItem) {
+            place.listingItem.style.display = isMatch ? '' : 'none';
+        }
+    });
+
+    // Update markers layer on the map
+    markersLayer.clearLayers();
+    if (activeMarkers.length > 0) {
+        markersLayer.addLayer(L.featureGroup(activeMarkers));
+        // Optionally adjust map view to fit visible markers
+        // map.fitBounds(L.featureGroup(activeMarkers).getBounds()); 
+    }
+}
+
+/**
+ * Creates and sets up the neighborhood filter dropdown.
+ * @param {Array<string>} uniqueNeighborhoods Sorted list of neighborhoods.
+ */
+function setupNeighborhoodFilter(uniqueNeighborhoods) {
+    const container = document.getElementById('neighborhood-filter-container');
+    if (!container) {
+        console.error("Missing DOM element: #neighborhood-filter-container. Cannot create filter dropdown.");
+        return;
+    }
+
+    const select = document.createElement('select');
+    select.id = 'neighborhood-filter';
+    select.className = 'custom-filter-dropdown';
+    
+    // Add default "All" option
+    const allOption = document.createElement('option');
+    allOption.value = 'all';
+    allOption.textContent = 'All Neighborhoods';
+    select.appendChild(allOption);
+
+    // Add neighborhood options
+    uniqueNeighborhoods.forEach(neighborhood => {
+        const option = document.createElement('option');
+        option.value = neighborhood;
+        option.textContent = neighborhood;
+        select.appendChild(option);
+    });
+
+    // Add event listener for filtering
+    select.addEventListener('change', (event) => {
+        filterPlaces(event.target.value);
+    });
+
+    container.appendChild(select);
+}
+
 // --- 4. DATA LOADING FUNCTION ---
 
 /**
- * Loads and parses the main.csv file, with a fallback to restaurants.csv.
+ * Loads and parses the main.csv file.
  * @returns {Promise<Array<Object> | null>} Array of parsed CSV rows (objects) or null on failure.
  */
 async function loadMainCsvData() {
     const pathsToTry = [
-        { path: MAIN_CSV_PATH, header: true, name: "Main Data" },
-        { path: RESTAURANTS_CSV_PATH, header: true, name: "Legacy Data" },
+        { path: MAIN_CSV_PATH, header: true, name: "Main Data" }
     ];
 
     for (const { path, header, name } of pathsToTry) {
@@ -245,11 +339,10 @@ async function processAndMergeData(allRestaurantDetails) {
         const place = new Place(name); 
         placeDataMap.set(name, place);
 
-        // A. Merge All Data (UPDATED to use the new class)
-        // Pass the raw dataRow to the HappyHourData constructor for explicit mapping
+        // A. Merge All Data: Use the constructor to map raw CSV data to the typed class
         place.happyHourData = new HappyHourData(dataRow); 
         
-        // B. Load and PARSE Coordinates from the single 'coordinates' column (FIXED)
+        // B. Load and PARSE Coordinates from the single 'coordinates' column
         let lat = null;
         let lng = null;
 
@@ -257,11 +350,13 @@ async function processAndMergeData(allRestaurantDetails) {
         if (coordsString) {
             const coordsArray = coordsString.split(',');
             if (coordsArray.length === 2) {
-                // Parse the first element (index 0) as latitude, second (index 1) as longitude
                 lat = parseFloat(coordsArray[0].trim());
                 lng = parseFloat(coordsArray[1].trim());
             }
         }
+        
+        // Set neighborhood and other core properties
+        place.neighborhood = dataRow.neighborhood || ''; // Assuming a 'neighborhood' column exists
         
         // C. Apply parsed coordinates to the Place object
         place.lat = lat;
@@ -322,7 +417,7 @@ async function initializeMapAndData() {
     }).addTo(map);
     markersLayer.addTo(map);
 
-    // 2. Load All Data from main.csv (or fallback)
+    // 2. Load All Data
     const allRestaurantDetails = await loadMainCsvData();
     
     if (!allRestaurantDetails || allRestaurantDetails.length === 0) {
@@ -330,8 +425,12 @@ async function initializeMapAndData() {
         return;
     }
 
-    // 3. Process and Merge All Data
+    // 3. Process and Merge All Data (populates placeDataMap)
     await processAndMergeData(allRestaurantDetails);
+    
+    // 🆕 4. Setup Neighborhood Filter 🆕
+    const uniqueNeighborhoods = getUniqueNeighborhoods(placeDataMap);
+    setupNeighborhoodFilter(uniqueNeighborhoods);
 }
 
 // Start the application when the DOM is fully loaded

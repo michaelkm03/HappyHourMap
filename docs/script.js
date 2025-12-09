@@ -70,50 +70,54 @@ const EaterIcon = (index) => L.divIcon({
     className: 'eater-marker',
     html: '', 
     iconSize: [15, 15],
-    iconAnchor: [7, 7]  
+    iconAnchor: [7, 7] 
 });
 
 /**
- * Creates the HTML content for a Leaflet marker popup.
+ * Creates the HTML content for a Leaflet marker popup, now mirroring the sidebar design.
  */
 function createPopupContent(place) {
+    
+    // --- Determine Current Day and Corresponding Key ---
+    const today = new Date();
+    const dayIndex = today.getDay(); 
+    const dayKeys = [
+        'details_sunday', 'details_monday', 'details_tuesday', 
+        'details_wednesday', 'details_thursday', 'details_friday', 'details_saturday'
+    ];
+    
+    const currentDayKey = dayKeys[dayIndex];
+    const currentDayDetail = place.happyHourData[currentDayKey] || 'N/A';
+
+    const dayTitle = currentDayKey
+        .replace('details_', '')
+        .replace(/^./, str => str.toUpperCase());
+    // ---------------------------------------------------
+    
     let content = `
         <div class="popup-content">
             <h4 class="popup-title">${place.name}</h4>
-            <p class="popup-address">${place.formattedAddress || 'Address not available'}</p>
             <hr class="popup-divider">
     `;
-
-    let detailsHtml = '';
     
-    // Loop through every key in the HappyHourData object
-    for (const key in place.happyHourData) {
-        if (place.happyHourData.hasOwnProperty(key)) {
-            const detailValue = place.happyHourData[key] || 'N/A';
-            
-            // Convert key (e.g., 'details_monday') to readable title (e.g., 'Details Monday')
-            let title = key.replace(/_/g, ' ').replace(/^./, str => str.toUpperCase());
-
-            // Optionally, skip keys if the value is empty or not useful
-            if (!detailValue || detailValue === 'N/A' || detailValue.trim() === '') continue;
-
-            // Use the CSS classes defined for the popup styles
-            detailsHtml += `<p class="popup-happy-hour-detail"><span class="popup-key">${title}:</span> <strong class="popup-value">${detailValue}</strong></p>`;
-        }
-    }
-    content += detailsHtml;
+    // 🍹 Today's Happy Hour (Mirrors sidebar tile-content)
+    content += `
+        <div class="popup-happy-hour-detail">
+            <p style="margin: 0; line-height: 1.4;">
+                <span class="popup-value">${currentDayDetail}</span>
+            </p>
+        </div>
+    `;
 
     // Add map link if available
     if (place.mapUri) {
-        // Clean up legacy URL prefixes if present
         const cleanUri = place.mapUri.replace('http://googleusercontent.com/maps.google.com/', '');
-        content += `<p style="margin-top: 10px;"><a href="${cleanUri}" target="_blank">View on Google Maps</a></p>`;
+        content += `<a href="${cleanUri}" target="_blank">View on Google Maps</a>`;
     }
     
     content += `</div>`;
     return content;
 }
-
 
 /**
  * Creates the sidebar listing item for a restaurant and attaches map interaction handlers.
@@ -124,7 +128,6 @@ function createListingItem(place, index) {
 
     // --- 1. Determine Current Day and Corresponding Key ---
     const today = new Date();
-    // Using current local time: 0 = Sunday, 1 = Monday, ..., 6 = Saturday
     const dayIndex = today.getDay(); 
     const dayKeys = [
         'details_sunday', 'details_monday', 'details_tuesday', 
@@ -134,32 +137,35 @@ function createListingItem(place, index) {
     const currentDayKey = dayKeys[dayIndex];
     const currentDayDetail = place.happyHourData[currentDayKey] || 'N/A';
 
-    // Format the key into a readable title (e.g., "details_tuesday" -> "Tuesday HH")
     const dayTitle = currentDayKey
         .replace('details_', '')
-        .replace(/^./, str => str.toUpperCase()) + ' HH'; 
+        .replace(/^./, str => str.toUpperCase());
     // ---------------------------------------------------
 
     const item = document.createElement('div');
     item.className = 'listing-item';
     item.setAttribute('data-index', index);
     
-    // START: CLEANER, LARGER, UPDATED HTML STRUCTURE
+    // START: FLATICON UICONS INTEGRATION
     item.innerHTML = `
-        <div class="listing-details">
+        <div class="tile-header">
             <h5 class="restaurant-name">${place.name}</h5>
-            
             <p class="listing-neighborhood">
-                <span class="neighborhood-tag">📍 ${place.neighborhood || 'LA Area'}</span>
+                <span class="neighborhood-tag">
+                    <span class="location-icon fi fi-rr-marker"></span> ${place.neighborhood || 'LA Area'} 
+                </span> 
             </p>
-            
+        </div>
+        
+        <div class="tile-content">
             <p class="happy-hour-details">
-                <span class="icon-flair">🍹</span> **${dayTitle}**: <strong>${currentDayDetail}</strong>
+                <span class="icon-flair fi fi-rr-cocktail"></span> 
+                <span class="deal-day">Today's Deal:</span> 
+                <strong class="deal-text">${currentDayDetail}</strong>
             </p>
-            
-            </div>
+        </div>
     `;
-    // END: CLEANER, LARGER, UPDATED HTML STRUCTURE
+    // END: FLATICON UICONS INTEGRATION
 
     // Add click handler to zoom to the marker
     item.addEventListener('click', () => {
@@ -199,7 +205,32 @@ function getUniqueNeighborhoods(placeMap) {
 }
 
 /**
+ * Calculates the geographic center (centroid) of a list of Leaflet markers.
+ * @param {Array<L.Marker>} markers Array of Leaflet marker objects.
+ * @returns {{lat: number, lng: number} | null} The average center point or null if no markers.
+ */
+function calculateCentroid(markers) {
+    if (markers.length === 0) return null;
+
+    let totalLat = 0;
+    let totalLng = 0;
+    
+    markers.forEach(marker => {
+        const latlng = marker.getLatLng();
+        totalLat += latlng.lat;
+        totalLng += latlng.lng;
+    });
+
+    return {
+        lat: totalLat / markers.length,
+        lng: totalLng / markers.length
+    };
+}
+
+
+/**
  * Filters the map markers and sidebar listings based on the selected neighborhood.
+ * NOW centers the map on the centroid of the visible markers.
  * @param {string} selectedNeighborhood The neighborhood to filter by (or "all").
  */
 function filterPlaces(selectedNeighborhood) {
@@ -225,8 +256,21 @@ function filterPlaces(selectedNeighborhood) {
     markersLayer.clearLayers();
     if (activeMarkers.length > 0) {
         markersLayer.addLayer(L.featureGroup(activeMarkers));
-        // Optionally adjust map view to fit visible markers
-        // map.fitBounds(L.featureGroup(activeMarkers).getBounds()); 
+
+        // 1. Calculate the centroid of the active markers 
+        const centroid = calculateCentroid(activeMarkers);
+        
+        if (centroid) {
+            // Set zoom level slightly closer for a specific neighborhood
+            const zoomLevel = selectedNeighborhood === 'all' ? STARTING_ZOOM : 13; 
+            
+            // 2. Center the map on the centroid
+            map.setView([centroid.lat, centroid.lng], zoomLevel, { animate: true }); 
+        }
+
+    } else {
+        // If no markers are active, reset to LA center
+        map.setView(LA_CENTER, STARTING_ZOOM, { animate: true });
     }
 }
 
@@ -428,7 +472,7 @@ async function initializeMapAndData() {
     // 3. Process and Merge All Data (populates placeDataMap)
     await processAndMergeData(allRestaurantDetails);
     
-    // 🆕 4. Setup Neighborhood Filter 🆕
+    // 4. Setup Neighborhood Filter
     const uniqueNeighborhoods = getUniqueNeighborhoods(placeDataMap);
     setupNeighborhoodFilter(uniqueNeighborhoods);
 }

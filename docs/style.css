@@ -1,0 +1,286 @@
+@import url('https://rsms.me/inter/inter.css');
+
+/* --- COLOR PALETTE ---
+   #BF3100: Deep Red-Brown (Primary Accent/Main Text/Dark BG)
+   #D76A03: Deep Orange (Secondary Accent/Muted Text)
+   #F5BB00: Bright Gold (Detail/Icon Highlight)
+*/
+
+/* --- 1. GLOBAL LAYOUT STYLES --- */
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Inter', sans-serif;
+    overflow: hidden;
+    color: #BF3100; /* Set default text color to Deep Red-Brown */
+}
+
+h1 {
+    margin: 0;
+    padding: 10px 15px;
+    font-size: 1.5em;
+    background: #BF3100; /* Primary Accent */
+    color: white;
+}
+
+.map-container {
+    display: flex;
+    height: calc(100vh - 50px);
+}
+
+#map {
+    flex-grow: 1;
+    height: 100%;
+}
+
+/* --- 2. SIDEBAR CONTAINER & FILTER STYLES --- */
+
+#listings {
+    width: 450px;
+    height: 100%;
+    padding: 0; 
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    background: #f8f8f8;
+    
+    display: flex;
+    flex-direction: column;
+}
+
+#neighborhood-filter-container {
+    padding: 15px;
+    background: white;
+    border-bottom: 1px solid #ddd;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    z-index: 10;
+}
+
+.custom-filter-dropdown {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+    font-family: 'Inter', sans-serif;
+    color: #BF3100;
+    background-color: #fff;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23444" d="M7 10l5 5 5-5z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.custom-filter-dropdown:focus {
+    outline: none;
+    border-color: #D76A03; /* Deep Orange focus */
+}
+
+/* --- 3. LIST AND ITEM STYLES (CARD DESIGN) --- */
+
+#restaurant-list {
+    list-style: none;
+    padding: 15px;
+    margin: 0;
+    overflow-y: scroll;
+    flex-grow: 1; 
+}
+
+.listing-item {
+    padding: 20px 25px; 
+    margin-bottom: 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    background: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); 
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.listing-item:hover {
+    background-color: #fcfcfc;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12); 
+}
+
+.listing-item.active {
+    position: relative;
+    background-color: #fff; 
+    transform: translateY(-2px); 
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* Deep Red-Brown accent bar on active item */
+.listing-item.active::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 6px;
+    background-color: #BF3100; /* Primary Accent */
+    border-radius: 8px 0 0 8px;
+}
+
+/* Card Section Separation */
+
+.tile-content {
+    padding-top: 15px; 
+    border-top: 1px solid #f0f0f0; 
+    margin-top: 15px;
+}
+
+/* 🏆 Restaurant Name */
+.restaurant-name {
+    margin: 0 0 5px 0;
+    font-size: 1.7em;
+    font-weight: 800;
+    color: #BF3100; /* Deep Red-Brown */
+}
+
+/* 🏷️ Neighborhood Tag (Location text) */
+.listing-neighborhood {
+    margin: 0 0 5px 0;
+    font-size: 0.9em;
+    font-weight: 600;
+}
+
+.neighborhood-tag {
+    color: #D76A03; /* Deep Orange for Location tag */
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Location Icon Style (Flaticon) */
+.location-icon {
+    color: #F5BB00; /* Bright Gold icon */
+    font-size: 1em;
+    margin-right: 5px;
+}
+
+/* 📍 Address (Muted Information) */
+.listing-address {
+    margin: 5px 0 0 0;
+    font-size: 0.85em;
+    color: #D76A03; /* Deep Orange for muted text */
+}
+
+/* 🍹 Happy Hour Details */
+.happy-hour-details {
+    font-size: 1em;
+    margin: 0;
+    color: #BF3100;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.deal-day {
+    font-weight: 700;
+    color: #BF3100; /* Deep Red-Brown */
+}
+
+/* The actual deal value (The `<strong>` tag) */
+.happy-hour-details strong {
+    color: #D76A03; /* Deep Orange for the deal text */
+    font-weight: 800;
+}
+
+/* Deal Icon Style (Flaticon) */
+.icon-flair {
+    color: #F5BB00; /* Bright Gold icon */
+    font-size: 1em;
+    margin-right: 5px;
+}
+
+/* --- 4. CUSTOM MARKER ICON STYLES --- */
+.eater-marker {
+    background-color: #BF3100; /* Primary Accent */
+    color: white;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: 14px;
+    border: 2px solid white;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* --- 5. POPUP STYLES (Light Background - Mirrors Sidebar) --- */
+
+.leaflet-popup-content-wrapper {
+    background: white; /* Changed from #BF3100 to White */
+    color: #BF3100;    /* Set default text color to Deep Red-Brown */
+    border-radius: 8px;
+    padding: 0; 
+    font-family: 'Inter', sans-serif;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Added shadow for lift */
+}
+
+.leaflet-popup-tip {
+    background: white; /* Changed from #BF3100 to White */
+}
+
+.popup-content {
+    padding: 15px 20px; /* Increased padding for better look */
+    max-width: 300px; 
+}
+
+/* 🏆 Restaurant Name - Mirrors .restaurant-name in sidebar */
+.popup-title {
+    margin: 0 0 5px 0;
+    font-size: 1.5em; /* Slightly smaller than sidebar title */
+    font-weight: 800;
+    color: #BF3100; /* Deep Red-Brown */
+}
+
+/* 📍 Address - Mirrors .listing-address in sidebar */
+.popup-address {
+    margin: 0 0 10px 0;
+    font-size: 0.85em;
+    color: #D76A03; /* Deep Orange address text (muted) */
+    opacity: 1;
+}
+
+.popup-divider {
+    border: 0;
+    height: 1px;
+    background: #f0f0f0; /* Light divider */
+    margin: 10px 0;
+}
+
+/* 🍹 Happy Hour Details Container - Mirrors .happy-hour-details */
+.popup-happy-hour-detail {
+    font-size: 1em;
+    margin: 5px 0 0 0;
+    color: #BF3100; /* Deep Red-Brown */
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+/* The Day Title (e.g., "Monday Deal:") - Mirrors .deal-day */
+.popup-key {
+    font-weight: 700;
+    color: #BF3100; /* Deep Red-Brown */
+    white-space: normal; /* Allow text wrapping */
+}
+
+/* The actual deal value - Mirrors .happy-hour-details strong */
+.popup-value {
+    color: #D76A03; /* Deep Orange for the deal text */
+    font-weight: 800;
+    word-wrap: break-word;
+}
+
+/* Link Style */
+.popup-content a {
+    color: #BF3100; /* Deep Red-Brown link on white background */
+    font-weight: 600;
+    text-decoration: none;
+    display: block; /* Make link a separate line */
+    margin-top: 10px;
+    padding-top: 5px;
+    border-top: 1px dashed #f0f0f0;
+}

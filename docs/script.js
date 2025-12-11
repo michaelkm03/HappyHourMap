@@ -15,7 +15,6 @@ let placeDataMap = new Map();
 // --- GLOBAL STATE VARIABLE ---
 /**
  * @type {Place | null} Tracks the currently selected restaurant for single-pin view toggle.
- * It is now primarily used to track the last clicked place for highlight purposes.
  */
 let activePlace = null; 
 // ---------------------------------
@@ -28,6 +27,16 @@ const LA_CENTER = [34.0522, -118.2437];
 const STARTING_ZOOM = 12; 
 const TARGET_ZOOM = 16; 
 const HAPPY_HOUR_HEADER = "Name,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday,GAMES?!,HAUNTED?!,address,restaurant google map url,coordinates"; 
+
+// --- SIZE DEFINITIONS ---
+// Standard Marker Size (Matches default .happy-house-map-marker CSS 20px)
+const STANDARD_ICON_SIZE = [12, 12]; 
+const STANDARD_ICON_ANCHOR = [10, 10]; 
+
+// Highlighted Marker Size (Used to tell Leaflet how big the icon is for centering)
+const HIGHLIGHTED_ICON_SIZE = [36, 36]; 
+const HIGHLIGHTED_ICON_ANCHOR = [18, 18]; 
+// -----------------------------
 
 
 // --- 2. NEW DATA STRUCTURES ---
@@ -69,32 +78,56 @@ class Place {
 // --- 3. UI/MAP UTILITY FUNCTIONS ---
 
 /**
- * Creates a custom Leaflet DivIcon for the map marker.
+ * Creates a custom Leaflet DivIcon for the map marker using the STANDARD size.
  */
 const HappyHouseMapIcon = (index) => L.divIcon({
     className: 'happy-house-map-marker',
+    // Initial pins are empty; we dynamically insert the star on highlight.
     html: '', 
-    iconSize: [12, 12], 
-    iconAnchor: [6, 6] 
+    iconSize: STANDARD_ICON_SIZE, 
+    iconAnchor: STANDARD_ICON_ANCHOR
 });
 
 /**
- * **NEW RESET LOGIC:** Resets the map and sidebar back to the 'All Neighborhoods' default state.
+ * Clears the 'highlighted-marker' class, star content, and resets the icon size/anchor.
+ */
+function clearMarkerHighlight() {
+    if (activePlace && activePlace.marker && activePlace.marker._icon) {
+        const iconElement = activePlace.marker._icon;
+        
+        // 1. Reset Leaflet's internal icon size and anchor properties
+        activePlace.marker.options.icon.options.iconSize = STANDARD_ICON_SIZE;
+        activePlace.marker.options.icon.options.iconAnchor = STANDARD_ICON_ANCHOR;
+
+        // 2. Remove highlight CSS class and star content
+        iconElement.classList.remove('highlighted-marker');
+        iconElement.innerHTML = '';
+        
+        // 3. Force Leaflet to update the marker's DOM element size/position
+        activePlace.marker.setIcon(activePlace.marker.options.icon);
+    }
+}
+
+/**
+ * Resets the map and sidebar back to the 'All Neighborhoods' default state.
  */
 function resetToDefaultView() {
-    // 1. Clear highlighting on all sidebar items
+    // 1. Clear highlight on the currently active marker
+    clearMarkerHighlight();
+    
+    // 2. Clear highlighting on all sidebar items
     document.querySelectorAll('.listing-item').forEach(li => li.classList.remove('active'));
     
-    // 2. Clear the global state
+    // 3. Clear the global state
     activePlace = null;
 
-    // 3. Reset the filter dropdown to 'all'
+    // 4. Reset the filter dropdown to 'all'
     const filterDropdown = document.getElementById('neighborhood-filter');
     if (filterDropdown && filterDropdown.value !== 'all') {
         filterDropdown.value = 'all';
     }
 
-    // 4. Re-run filterPlaces to display all markers and reset map view
+    // 5. Re-run filterPlaces to display all markers and reset map view
     filterPlaces('all'); 
 }
 
@@ -148,40 +181,72 @@ function createListingItem(place, index) {
         </div>
     `;
 
-    // --- UPDATED CLICK HANDLER LOGIC FOR APPLYING NEIGHBORHOOD FILTER ---
+    // --- UPDATED CLICK HANDLER LOGIC FOR APPLYING HIGHLIGHTING AND CENTERING ---
     item.addEventListener('click', () => {
         
         const filterDropdown = document.getElementById('neighborhood-filter');
         const currentFilter = filterDropdown ? filterDropdown.value : 'all';
         const clickedNeighborhood = place.neighborhood || 'all';
 
-        // Check if the same neighborhood is being clicked OR if the same item is clicked twice
-        if (activePlace === place || currentFilter === clickedNeighborhood) {
-            // UNSET: Return to default (all) view
-            resetToDefaultView();
+        // 1. Handle clicking the currently active place
+        if (activePlace === place) {
             return; 
         }
 
-        // SET / NAVIGATE: Apply the filter for the clicked item's neighborhood
-        
-        // 1. Set the active place just for immediate highlighting/tracking
+        // 2. CLEAR PREVIOUS STATE
+        clearMarkerHighlight();
+        document.querySelectorAll('.listing-item').forEach(li => li.classList.remove('active'));
+
+
+        // 3. SET NEW ACTIVE STATE
         activePlace = place;
-        
-        // 2. Synchronize the filter dropdown to the selected neighborhood.
-        if (filterDropdown) {
-            filterDropdown.value = clickedNeighborhood;
+
+        // 4. APPLY HIGHLIGHTS and UPDATE SIZE
+        if (place.marker && place.marker._icon) {
+            const iconElement = place.marker._icon;
+
+            // Update Leaflet's internal icon size and anchor properties for the highlighted pin
+            place.marker.options.icon.options.iconSize = HIGHLIGHTED_ICON_SIZE;
+            place.marker.options.icon.options.iconAnchor = HIGHLIGHTED_ICON_ANCHOR;
+
+            // Force Leaflet to update the marker's DOM element size/position
+            place.marker.setIcon(place.marker.options.icon);
+            
+            // Add highlight CSS class and STAR ICON CONTENT (CSS handles visual transformation)
+            iconElement.classList.add('highlighted-marker');
         }
 
-        // 3. Apply the filter (this clears old highlights and draws new pins)
-        filterPlaces(clickedNeighborhood); 
-        
-        // 4. Highlight the active listing (find it after filterPlaces runs)
-        document.querySelectorAll('.listing-item').forEach(li => li.classList.remove('active'));
-        // Find the specific item being clicked, which is now visible, and highlight it.
+        // Highlight the new active sidebar item
         item.classList.add('active');
         item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        
-        // NOTE: Map centering is now handled inside filterPlaces.
+
+
+        // 5. HANDLE FILTER/MAP CHANGE OR RE-CENTER (New Logic)
+        if (currentFilter !== clickedNeighborhood) {
+            // Case A: Filter changed. We need to filter and recenter based on the new filter set.
+            if (filterDropdown) {
+                filterDropdown.value = clickedNeighborhood;
+            }
+            filterPlaces(clickedNeighborhood); 
+        } else {
+            // Case B: Filter did NOT change. We are only selecting a new item within the current filtered set.
+            // We must re-center the map on the centroid of the *current visible markers*.
+            
+            // Get all currently visible markers (markers that match the current filter)
+            const currentMarkers = Array.from(placeDataMap.values())
+                .filter(p => p.neighborhood === currentFilter || currentFilter === 'all')
+                .map(p => p.marker)
+                .filter(m => m !== null);
+            
+            if (currentMarkers.length > 0) {
+                const centroid = calculateCentroid(currentMarkers);
+                const zoomLevel = currentFilter === 'all' ? STARTING_ZOOM : 13;
+                
+                if (centroid) {
+                    map.setView([centroid.lat, centroid.lng], zoomLevel, { animate: true });
+                }
+            }
+        }
     });
     // --- END UPDATED CLICK HANDLER LOGIC ---
 
@@ -227,12 +292,9 @@ function calculateCentroid(markers) {
 
 /**
  * Filters the map markers and sidebar listings based on the selected neighborhood.
+ * This function handles the *initial* map centering after a filter change.
  */
 function filterPlaces(selectedNeighborhood) {
-    // activePlace is NOT reset here, as we want to preserve highlight state 
-    // when filtering is initiated by the dropdown, but we ensure the old 
-    // highlights are removed below.
-
     let activeMarkers = [];
     
     placeDataMap.forEach(place => {
@@ -246,8 +308,10 @@ function filterPlaces(selectedNeighborhood) {
         
         // Toggle sidebar visibility
         if (place.listingItem) {
-            // Remove active class for all items when filtering
-            place.listingItem.classList.remove('active'); 
+            // Remove active class for all items when filtering (except the active one)
+            if (place !== activePlace) {
+                place.listingItem.classList.remove('active'); 
+            }
             place.listingItem.style.display = isMatch ? '' : 'none';
         }
     });
@@ -255,9 +319,24 @@ function filterPlaces(selectedNeighborhood) {
     // Update markers layer on the map
     markersLayer.clearLayers();
     if (activeMarkers.length > 0) {
+        // Add only the filtered markers back to the map layer
         markersLayer.addLayer(L.featureGroup(activeMarkers));
 
-        // 1. Calculate the centroid of the active markers 
+        // Re-apply highlight if the active place is still visible after filtering
+        if (activePlace && activePlace.marker && activePlace.marker._icon && activeMarkers.includes(activePlace.marker)) {
+             
+            const iconElement = activePlace.marker._icon;
+
+            // Re-apply the HIGHLIGHTED size/anchor
+            activePlace.marker.options.icon.options.iconSize = HIGHLIGHTED_ICON_SIZE;
+            activePlace.marker.options.icon.options.iconAnchor = HIGHLIGHTED_ICON_ANCHOR;
+            activePlace.marker.setIcon(activePlace.marker.options.icon);
+            
+            // Re-apply the CSS class and star content
+             iconElement.classList.add('highlighted-marker');
+        }
+
+        // 1. Calculate the centroid of the active markers (Used for filter change)
         const centroid = calculateCentroid(activeMarkers);
         
         if (centroid) {
@@ -306,6 +385,11 @@ function setupNeighborhoodFilter(uniqueNeighborhoods) {
     select.addEventListener('change', (event) => {
         const selectedValue = event.target.value;
         
+        // CLEAR HIGHLIGHT, STAR CONTENT, AND ACTIVE STATE when filter dropdown changes
+        clearMarkerHighlight();
+        activePlace = null; 
+        document.querySelectorAll('.listing-item').forEach(li => li.classList.remove('active'));
+
         if (selectedValue === 'all') {
             // Clicking 'All' in the dropdown should return to the default view
             resetToDefaultView(); 
@@ -453,6 +537,15 @@ async function initializeMapAndData() {
     }).addTo(map);
     markersLayer.addTo(map);
 
+    // Add map click handler for resetting the highlight
+    map.on('click', (e) => {
+        // Only reset if the click target is the map pane itself (not a marker or popup)
+        if (e.originalEvent.target.classList.contains('leaflet-pane') || e.originalEvent.target.id === 'map' || e.originalEvent.target.classList.contains('leaflet-marker-pane')) {
+            resetToDefaultView();
+        }
+    });
+
+
     // 2. Load All Data
     const allRestaurantDetails = await loadMainCsvData();
     
@@ -473,4 +566,4 @@ async function initializeMapAndData() {
 }
 
 // Start the application when the DOM is fully loaded
-document.addEventListener('DOMContentLoaded', initializeMapAndData); 
+document.addEventListener('DOMContentLoaded', initializeMapAndData);

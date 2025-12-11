@@ -12,20 +12,26 @@ const LIST_CONTAINER = document.getElementById('restaurant-list');
  */
 let placeDataMap = new Map();
 
+// --- GLOBAL STATE VARIABLE ---
+/**
+ * @type {Place | null} Tracks the currently selected restaurant for single-pin view toggle.
+ * It is now primarily used to track the last clicked place for highlight purposes.
+ */
+let activePlace = null; 
+// ---------------------------------
+
 // --- Configuration Variables ---
 
 const MAIN_CSV_PATH = 'main.csv';
 
 const LA_CENTER = [34.0522, -118.2437]; 
 const STARTING_ZOOM = 12; 
+const TARGET_ZOOM = 16; 
 const HAPPY_HOUR_HEADER = "Name,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday,GAMES?!,HAUNTED?!,address,restaurant google map url,coordinates"; 
 
 
 // --- 2. NEW DATA STRUCTURES ---
 
-/**
- * Class to hold detailed happy hour data, mapping directly to main.csv columns.
- */
 class HappyHourData {
     constructor(dataRow = {}) {
         this.details_monday = dataRow.details_monday || '';
@@ -36,16 +42,12 @@ class HappyHourData {
         this.details_saturday = dataRow.details_saturday || '';
         this.details_sunday = dataRow.details_sunday || '';
         
-        // Games and Haunted fields
         this.details_games = dataRow.details_games || '';
         this.details_haunted = dataRow.details_haunted || '';
     }
 }
 
 
-/**
- * Comprehensive class to hold all merged data for a single restaurant.
- */
 class Place {
     constructor(name) {
         this.name = name;
@@ -55,7 +57,7 @@ class Place {
         this.lat = null;
         this.lng = null;
         this.formattedAddress = '';
-        this.neighborhood = ''; // Added property
+        this.neighborhood = '';
         this.rawApiResponse = {};
         this.marker = null;
         this.listingItem = null;
@@ -66,18 +68,51 @@ class Place {
 
 // --- 3. UI/MAP UTILITY FUNCTIONS ---
 
-const EaterIcon = (index) => L.divIcon({
-    className: 'eater-marker',
+/**
+ * Creates a custom Leaflet DivIcon for the map marker.
+ */
+const HappyHouseMapIcon = (index) => L.divIcon({
+    className: 'happy-house-map-marker',
     html: '', 
-    iconSize: [15, 15],
-    iconAnchor: [7, 7] 
+    iconSize: [12, 12], 
+    iconAnchor: [6, 6] 
 });
 
 /**
- * Creates the HTML content for a Leaflet marker popup, now mirroring the sidebar design.
+ * **NEW RESET LOGIC:** Resets the map and sidebar back to the 'All Neighborhoods' default state.
+ */
+function resetToDefaultView() {
+    // 1. Clear highlighting on all sidebar items
+    document.querySelectorAll('.listing-item').forEach(li => li.classList.remove('active'));
+    
+    // 2. Clear the global state
+    activePlace = null;
+
+    // 3. Reset the filter dropdown to 'all'
+    const filterDropdown = document.getElementById('neighborhood-filter');
+    if (filterDropdown && filterDropdown.value !== 'all') {
+        filterDropdown.value = 'all';
+    }
+
+    // 4. Re-run filterPlaces to display all markers and reset map view
+    filterPlaces('all'); 
+}
+
+
+/**
+ * Creates the HTML content for a Leaflet marker popup (unused).
  */
 function createPopupContent(place) {
+    // Function left empty as popups are removed.
+}
+
+/**
+ * Creates the sidebar listing item and attaches the primary map interaction handler.
+ */
+function createListingItem(place, index) {
     
+    if (!LIST_CONTAINER) return;
+
     // --- Determine Current Day and Corresponding Key ---
     const today = new Date();
     const dayIndex = today.getDay(); 
@@ -88,71 +123,18 @@ function createPopupContent(place) {
     
     const currentDayKey = dayKeys[dayIndex];
     const currentDayDetail = place.happyHourData[currentDayKey] || 'N/A';
-
-    const dayTitle = currentDayKey
-        .replace('details_', '')
-        .replace(/^./, str => str.toUpperCase());
-    // ---------------------------------------------------
-    
-    let content = `
-        <div class="popup-content">
-            <h4 class="popup-title">${place.name}</h4>
-            <hr class="popup-divider">
-    `;
-    
-    // 🍹 Today's Happy Hour (Mirrors sidebar tile-content)
-    content += `
-        <div class="popup-happy-hour-detail">
-            <p style="margin: 0; line-height: 1.4;">
-                <span class="popup-value">${currentDayDetail}</span>
-            </p>
-        </div>
-    `;
-
-    // Add map link if available
-    if (place.mapUri) {
-        const cleanUri = place.mapUri.replace('http://googleusercontent.com/maps.google.com/', '');
-        content += `<a href="${cleanUri}" target="_blank">View on Google Maps</a>`;
-    }
-    
-    content += `</div>`;
-    return content;
-}
-
-/**
- * Creates the sidebar listing item for a restaurant and attaches map interaction handlers.
- */
-function createListingItem(place, index) {
-    
-    if (!LIST_CONTAINER) return;
-
-    // --- 1. Determine Current Day and Corresponding Key ---
-    const today = new Date();
-    const dayIndex = today.getDay(); 
-    const dayKeys = [
-        'details_sunday', 'details_monday', 'details_tuesday', 
-        'details_wednesday', 'details_thursday', 'details_friday', 'details_saturday'
-    ];
-    
-    const currentDayKey = dayKeys[dayIndex];
-    const currentDayDetail = place.happyHourData[currentDayKey] || 'N/A';
-
-    const dayTitle = currentDayKey
-        .replace('details_', '')
-        .replace(/^./, str => str.toUpperCase());
     // ---------------------------------------------------
 
     const item = document.createElement('div');
     item.className = 'listing-item';
     item.setAttribute('data-index', index);
     
-    // START: FLATICON UICONS INTEGRATION
     item.innerHTML = `
         <div class="tile-header">
             <h5 class="restaurant-name">${place.name}</h5>
             <p class="listing-neighborhood">
                 <span class="neighborhood-tag">
-                    <span class="location-icon fi fi-rr-marker"></span> ${place.neighborhood || 'LA Area'} 
+                    <span class="happy-house-map-marker listing-icon"></span> ${place.neighborhood || 'LA Area'} 
                 </span> 
             </p>
         </div>
@@ -165,24 +147,43 @@ function createListingItem(place, index) {
             </p>
         </div>
     `;
-    // END: FLATICON UICONS INTEGRATION
 
-    // Add click handler to zoom to the marker
+    // --- UPDATED CLICK HANDLER LOGIC FOR APPLYING NEIGHBORHOOD FILTER ---
     item.addEventListener('click', () => {
-        // Center the map on the marker location
-        if (place.lat && place.lng) {
-            map.setView([place.lat, place.lng], map.getZoom() > 16 ? map.getZoom() : 16, { animate: true });
-        }
         
-        // Open the marker popup
-        if (place.marker) {
-            place.marker.openPopup();
+        const filterDropdown = document.getElementById('neighborhood-filter');
+        const currentFilter = filterDropdown ? filterDropdown.value : 'all';
+        const clickedNeighborhood = place.neighborhood || 'all';
+
+        // Check if the same neighborhood is being clicked OR if the same item is clicked twice
+        if (activePlace === place || currentFilter === clickedNeighborhood) {
+            // UNSET: Return to default (all) view
+            resetToDefaultView();
+            return; 
         }
 
-        // Highlight the active listing
+        // SET / NAVIGATE: Apply the filter for the clicked item's neighborhood
+        
+        // 1. Set the active place just for immediate highlighting/tracking
+        activePlace = place;
+        
+        // 2. Synchronize the filter dropdown to the selected neighborhood.
+        if (filterDropdown) {
+            filterDropdown.value = clickedNeighborhood;
+        }
+
+        // 3. Apply the filter (this clears old highlights and draws new pins)
+        filterPlaces(clickedNeighborhood); 
+        
+        // 4. Highlight the active listing (find it after filterPlaces runs)
         document.querySelectorAll('.listing-item').forEach(li => li.classList.remove('active'));
+        // Find the specific item being clicked, which is now visible, and highlight it.
         item.classList.add('active');
+        item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        
+        // NOTE: Map centering is now handled inside filterPlaces.
     });
+    // --- END UPDATED CLICK HANDLER LOGIC ---
 
     place.listingItem = item;
     LIST_CONTAINER.appendChild(item);
@@ -191,8 +192,6 @@ function createListingItem(place, index) {
 
 /**
  * Extracts unique, non-empty, and sorted neighborhood names from all Place objects.
- * @param {Map<string, Place>} placeMap Map of all place objects.
- * @returns {Array<string>} A sorted array of unique neighborhood names.
  */
 function getUniqueNeighborhoods(placeMap) {
     const neighborhoods = new Set();
@@ -206,8 +205,6 @@ function getUniqueNeighborhoods(placeMap) {
 
 /**
  * Calculates the geographic center (centroid) of a list of Leaflet markers.
- * @param {Array<L.Marker>} markers Array of Leaflet marker objects.
- * @returns {{lat: number, lng: number} | null} The average center point or null if no markers.
  */
 function calculateCentroid(markers) {
     if (markers.length === 0) return null;
@@ -230,10 +227,12 @@ function calculateCentroid(markers) {
 
 /**
  * Filters the map markers and sidebar listings based on the selected neighborhood.
- * NOW centers the map on the centroid of the visible markers.
- * @param {string} selectedNeighborhood The neighborhood to filter by (or "all").
  */
 function filterPlaces(selectedNeighborhood) {
+    // activePlace is NOT reset here, as we want to preserve highlight state 
+    // when filtering is initiated by the dropdown, but we ensure the old 
+    // highlights are removed below.
+
     let activeMarkers = [];
     
     placeDataMap.forEach(place => {
@@ -241,13 +240,14 @@ function filterPlaces(selectedNeighborhood) {
 
         if (place.marker) {
             if (isMatch) {
-                // Show marker by adding it to the temporary array
                 activeMarkers.push(place.marker);
             }
         }
         
         // Toggle sidebar visibility
         if (place.listingItem) {
+            // Remove active class for all items when filtering
+            place.listingItem.classList.remove('active'); 
             place.listingItem.style.display = isMatch ? '' : 'none';
         }
     });
@@ -276,7 +276,6 @@ function filterPlaces(selectedNeighborhood) {
 
 /**
  * Creates and sets up the neighborhood filter dropdown.
- * @param {Array<string>} uniqueNeighborhoods Sorted list of neighborhoods.
  */
 function setupNeighborhoodFilter(uniqueNeighborhoods) {
     const container = document.getElementById('neighborhood-filter-container');
@@ -305,7 +304,15 @@ function setupNeighborhoodFilter(uniqueNeighborhoods) {
 
     // Add event listener for filtering
     select.addEventListener('change', (event) => {
-        filterPlaces(event.target.value);
+        const selectedValue = event.target.value;
+        
+        if (selectedValue === 'all') {
+            // Clicking 'All' in the dropdown should return to the default view
+            resetToDefaultView(); 
+        } else {
+            // Otherwise, filter normally
+            filterPlaces(selectedValue);
+        }
     });
 
     container.appendChild(select);
@@ -313,10 +320,6 @@ function setupNeighborhoodFilter(uniqueNeighborhoods) {
 
 // --- 4. DATA LOADING FUNCTION ---
 
-/**
- * Loads and parses the main.csv file.
- * @returns {Promise<Array<Object> | null>} Array of parsed CSV rows (objects) or null on failure.
- */
 async function loadMainCsvData() {
     const pathsToTry = [
         { path: MAIN_CSV_PATH, header: true, name: "Main Data" }
@@ -370,10 +373,6 @@ async function loadMainCsvData() {
 
 // --- 5. DATA MERGING AND MAP PROCESSING ---
 
-/**
- * Processes the list of names, merges data from the single CSV, and creates markers/listings.
- * @param {Array<Object>} allRestaurantDetails The array of parsed rows from the CSV.
- */
 async function processAndMergeData(allRestaurantDetails) {
     
     const markerPromises = allRestaurantDetails.map(async (dataRow, index) => {
@@ -383,10 +382,10 @@ async function processAndMergeData(allRestaurantDetails) {
         const place = new Place(name); 
         placeDataMap.set(name, place);
 
-        // A. Merge All Data: Use the constructor to map raw CSV data to the typed class
+        // A. Merge All Data
         place.happyHourData = new HappyHourData(dataRow); 
         
-        // B. Load and PARSE Coordinates from the single 'coordinates' column
+        // B. Load and PARSE Coordinates
         let lat = null;
         let lng = null;
 
@@ -400,9 +399,7 @@ async function processAndMergeData(allRestaurantDetails) {
         }
         
         // Set neighborhood and other core properties
-        place.neighborhood = dataRow.neighborhood || ''; // Assuming a 'neighborhood' column exists
-        
-        // C. Apply parsed coordinates to the Place object
+        place.neighborhood = dataRow.neighborhood || ''; 
         place.lat = lat;
         place.lng = lng;
         place.formattedAddress = dataRow.address || '';
@@ -416,38 +413,33 @@ async function processAndMergeData(allRestaurantDetails) {
         if (!finalLat || !finalLng) {
              finalLat = LA_CENTER[0];
              finalLng = LA_CENTER[1];
-             console.warn(`[MISSING COORDS] No valid coordinates for ${name}. Using LA Center. Ensure 'coordinates' column has valid 'lat,lng' data.`);
+             console.warn(`[MISSING COORDS] No valid coordinates for ${name}. Using LA Center.`);
         }
         
         // E. Create Marker and Listing
         const marker = L.marker([finalLat, finalLng], {
-            icon: EaterIcon(index), 
+            icon: HappyHouseMapIcon(index), 
             title: name
-        }).bindPopup(createPopupContent(place));
+        });
 
         place.marker = marker;
         createListingItem(place, index);
 
+        // --- MARKER CLICK HANDLER ---
+        // Marker click programmatically triggers the sidebar click event
         marker.on('click', () => {
-            document.querySelectorAll('.listing-item').forEach(item => item.classList.remove('active'));
             const correspondingItem = document.querySelector(`.listing-item[data-index="${index}"]`);
             if (correspondingItem) {
-                correspondingItem.classList.add('active');
-                correspondingItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                correspondingItem.click(); 
             }
         });
-
+        
         allMarkers.push(marker);
         return marker;
     });
 
-    // Wait for all markers to be created before adding them to the map
-    Promise.all(markerPromises.filter(p => p !== null)).then(markers => {
-        const validMarkers = markers.filter(m => m !== null);
-        if (validMarkers.length > 0) {
-            markersLayer.addLayer(L.featureGroup(validMarkers));
-        }
-    });
+    // Wait for all markers to be created
+    await Promise.all(markerPromises.filter(p => p !== null));
 }
 
 
@@ -469,13 +461,16 @@ async function initializeMapAndData() {
         return;
     }
 
-    // 3. Process and Merge All Data (populates placeDataMap)
+    // 3. Process and Merge All Data (populates placeDataMap and allMarkers)
     await processAndMergeData(allRestaurantDetails);
     
     // 4. Setup Neighborhood Filter
     const uniqueNeighborhoods = getUniqueNeighborhoods(placeDataMap);
     setupNeighborhoodFilter(uniqueNeighborhoods);
+
+    // 5. Initial Map State: Ensure all markers are displayed and the map is centered based on the current filter ('all').
+    filterPlaces('all'); 
 }
 
 // Start the application when the DOM is fully loaded
-document.addEventListener('DOMContentLoaded', initializeMapAndData);
+document.addEventListener('DOMContentLoaded', initializeMapAndData); 

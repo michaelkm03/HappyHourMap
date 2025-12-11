@@ -1,9 +1,10 @@
 @import url('https://rsms.me/inter/inter.css');
 
 /* --- COLOR PALETTE ---
-   #BF3100: Deep Red-Brown (Primary Accent/Main Text/Dark BG)
-   #D76A03: Deep Orange (Secondary Accent/Muted Text)
-   #F5BB00: Bright Gold (Detail/Icon Highlight)
+    #BF3100: Deep Red-Brown (Primary Accent/Headers/Marker Fill)
+    #D76A03: Deep Orange (Secondary Accent/Deals/Hover Border)
+    #F5BB00: Bright Gold (Detail/Icon Highlight)
+    #212529: Dark Gray (General Text)
 */
 
 /* --- 1. GLOBAL LAYOUT STYLES --- */
@@ -14,20 +15,21 @@ body, html {
     height: 100%;
     font-family: 'Inter', sans-serif;
     overflow: hidden;
-    color: #BF3100; /* Set default text color to Deep Red-Brown */
+    color: #212529; /* Dark Gray for main body text */
 }
 
 h1 {
     margin: 0;
-    padding: 10px 15px;
-    font-size: 1.5em;
-    background: #BF3100; /* Primary Accent */
+    padding: 12px 18px;
+    font-size: 1.6em;
+    background: #BF3100; /* Deep Red-Brown */
     color: white;
+    font-weight: 900;
 }
 
 .map-container {
     display: flex;
-    height: calc(100vh - 50px);
+    height: calc(100vh - 50px); /* Adjust based on h1 height */
 }
 
 #map {
@@ -38,12 +40,11 @@ h1 {
 /* --- 2. SIDEBAR CONTAINER & FILTER STYLES --- */
 
 #listings {
-    width: 450px;
+    width: 420px; /* Slightly narrower sidebar */
     height: 100%;
     padding: 0; 
-    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-    background: #f8f8f8;
-    
+    box-shadow: -4px 0 10px rgba(0, 0, 0, 0.1);
+    background: #fcfcfc;
     display: flex;
     flex-direction: column;
 }
@@ -51,34 +52,36 @@ h1 {
 #neighborhood-filter-container {
     padding: 15px;
     background: white;
-    border-bottom: 1px solid #ddd;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid #eee;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
     z-index: 10;
 }
 
 .custom-filter-dropdown {
     width: 100%;
-    padding: 10px 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    padding: 12px 18px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
     font-size: 1em;
-    font-family: 'Inter', sans-serif;
+    font-weight: 500;
     color: #BF3100;
     background-color: #fff;
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23444" d="M7 10l5 5 5-5z"/></svg>');
+    /* Custom arrow for dropdown */
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23BF3100" d="M7 10l5 5 5-5z"/></svg>');
     background-repeat: no-repeat;
-    background-position: right 10px center;
-    background-size: 16px;
+    background-position: right 15px center;
+    background-size: 18px;
+    appearance: none; /* Remove default browser styling */
     cursor: pointer;
     transition: border-color 0.2s;
 }
 
 .custom-filter-dropdown:focus {
     outline: none;
-    border-color: #D76A03; /* Deep Orange focus */
+    border-color: #D76A03;
 }
 
-/* --- 3. LIST AND ITEM STYLES (CARD DESIGN) --- */
+/* --- 3. LIST AND ITEM STYLES (SLEEK CARD DESIGN) --- */
 
 #restaurant-list {
     list-style: none;
@@ -89,42 +92,31 @@ h1 {
 }
 
 .listing-item {
-    padding: 20px 25px; 
-    margin-bottom: 15px;
+    padding: 20px; 
+    margin-bottom: 12px;
     border-radius: 8px;
     cursor: pointer;
     background: white;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); 
-    transition: transform 0.2s, box-shadow 0.2s;
+    border: 1px solid #f0f0f0; /* Light border for definition */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); 
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
 }
 
 .listing-item:hover {
-    background-color: #fcfcfc;
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12); 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
+    border-color: #D76A03; /* Deep Orange on hover */
 }
 
 .listing-item.active {
-    position: relative;
-    background-color: #fff; 
+    /* Sleek Active State: Distinct Border and Elevated Shadow */
     transform: translateY(-2px); 
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-}
-
-/* Deep Red-Brown accent bar on active item */
-.listing-item.active::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 6px;
-    background-color: #BF3100; /* Primary Accent */
-    border-radius: 8px 0 0 8px;
+    border: 2px solid #BF3100; /* Primary Accent border */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); 
+    background-color: #fff;
 }
 
 /* Card Section Separation */
-
 .tile-content {
     padding-top: 15px; 
     border-top: 1px solid #f0f0f0; 
@@ -134,153 +126,185 @@ h1 {
 /* 🏆 Restaurant Name */
 .restaurant-name {
     margin: 0 0 5px 0;
-    font-size: 1.7em;
+    font-size: 1.6em;
     font-weight: 800;
     color: #BF3100; /* Deep Red-Brown */
 }
 
 /* 🏷️ Neighborhood Tag (Location text) */
 .listing-neighborhood {
-    margin: 0 0 5px 0;
+    margin: 0 0 10px 0;
     font-size: 0.9em;
-    font-weight: 600;
+    font-weight: 500;
 }
 
 .neighborhood-tag {
-    color: #D76A03; /* Deep Orange for Location tag */
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-/* Location Icon Style (Flaticon) */
-.location-icon {
-    color: #F5BB00; /* Bright Gold icon */
-    font-size: 1em;
-    margin-right: 5px;
-}
-
-/* 📍 Address (Muted Information) */
-.listing-address {
-    margin: 5px 0 0 0;
-    font-size: 0.85em;
-    color: #D76A03; /* Deep Orange for muted text */
+    color: #212529; /* Dark Gray for readability */
+    letter-spacing: 0.3px;
+    display: flex;
+    align-items: center;
 }
 
 /* 🍹 Happy Hour Details */
 .happy-hour-details {
-    font-size: 1em;
+    font-size: 0.95em;
     margin: 0;
-    color: #BF3100;
+    color: #212529;
     font-weight: 500;
     line-height: 1.4;
+    display: flex;
+    align-items: flex-start;
 }
 
 .deal-day {
     font-weight: 700;
     color: #BF3100; /* Deep Red-Brown */
+    margin-right: 5px;
+    white-space: nowrap;
 }
 
 /* The actual deal value (The `<strong>` tag) */
 .happy-hour-details strong {
     color: #D76A03; /* Deep Orange for the deal text */
-    font-weight: 800;
+    font-weight: 700;
+    word-wrap: break-word;
 }
 
 /* Deal Icon Style (Flaticon) */
 .icon-flair {
     color: #F5BB00; /* Bright Gold icon */
-    font-size: 1em;
-    margin-right: 5px;
+    font-size: 1.1em;
+    margin-right: 8px;
+    flex-shrink: 0;
 }
 
 /* --- 4. CUSTOM MARKER ICON STYLES --- */
-.eater-marker {
-    background-color: #BF3100; /* Primary Accent */
+
+.happy-house-map-marker {
+    background-color: #BF3100; /* Deep Red-Brown (Primary Accent) */
     color: white;
-    width: 30px;
-    height: 30px;
-    line-height: 30px;
+    width: 15px; 
+    height: 15px;
+    line-height: 15px; 
     text-align: center;
     border-radius: 50%;
     font-weight: bold;
     font-size: 14px;
     border: 2px solid white;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+    transition: transform 0.2s, background-color 0.2s, opacity 0.2s, border-color 0.2s;
 }
 
-/* --- 5. POPUP STYLES (Light Background - Mirrors Sidebar) --- */
-
-.leaflet-popup-content-wrapper {
-    background: white; /* Changed from #BF3100 to White */
-    color: #BF3100;    /* Set default text color to Deep Red-Brown */
-    border-radius: 8px;
-    padding: 0; 
-    font-family: 'Inter', sans-serif;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Added shadow for lift */
+/* Match the marker icon in the listing item for visual continuity */
+.happy-house-map-marker.listing-icon {
+    /* Smaller version used in the sidebar list item */
+    width: 10px;
+    height: 10px;
+    line-height: 10px;
+    border-width: 1px;
+    margin-right: 5px;
+    vertical-align: middle;
 }
 
-.leaflet-popup-tip {
-    background: white; /* Changed from #BF3100 to White */
+/* 1. Style for pins that are NOT in the active filter (Greyed Out) */
+.marker-inactive {
+    background-color: #aaaaaa !important; /* General Grey */
+    border-color: #f0f0f0 !important;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+    /* Make inactive pins slightly smaller and less opaque */
+    transform: scale(0.8); 
+    opacity: 0.7;
 }
 
-.popup-content {
-    padding: 15px 20px; /* Increased padding for better look */
-    max-width: 300px; 
-}
-
-/* 🏆 Restaurant Name - Mirrors .restaurant-name in sidebar */
-.popup-title {
-    margin: 0 0 5px 0;
-    font-size: 1.5em; /* Slightly smaller than sidebar title */
-    font-weight: 800;
-    color: #BF3100; /* Deep Red-Brown */
-}
-
-/* 📍 Address - Mirrors .listing-address in sidebar */
-.popup-address {
-    margin: 0 0 10px 0;
-    font-size: 0.85em;
-    color: #D76A03; /* Deep Orange address text (muted) */
+/* 2. Style for the currently selected/active pin (Yellow Highlight) */
+.highlighted-marker {
+    background-color: #F5BB00 !important; /* Bright Gold from palette */
+    border-color: #BF3100 !important; /* Deep Red-Brown border */
+    box-shadow: 0 0 8px rgba(245, 187, 0, 0.9); /* Glowing effect */
+    transform: scale(1.6); /* Make it much bigger to stand out */
+    z-index: 1000 !important; /* Ensure it draws on top of everything */
     opacity: 1;
 }
 
+/* --- 5. POPUP STYLES (SLEEK ALIGNMENT) --- */
+
+/* Wrapper: Controls the main box of the popup */
+.leaflet-popup-content-wrapper {
+    background: white; 
+    color: #212529; 
+    border-radius: 8px; /* Sleeker rounded corners */
+    padding: 0; 
+    font-family: 'Inter', sans-serif;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Elevated shadow */
+}
+
+/* Tip: The pointer that connects the popup to the marker */
+.leaflet-popup-tip {
+    /* Set the tip background to white to match the wrapper */
+    background: white; 
+}
+
+/* Inner Content: Padding and sizing for the text */
+.popup-content {
+    padding: 15px 20px; 
+    max-width: 300px; 
+}
+
+/* Restaurant Title */
+.popup-title {
+    margin: 0 0 5px 0;
+    font-size: 1.5em; 
+    font-weight: 800;
+    color: #BF3100; /* Deep Red-Brown (Primary Accent) */
+}
+
+/* Divider: Use the sleek thin line */
 .popup-divider {
     border: 0;
     height: 1px;
-    background: #f0f0f0; /* Light divider */
+    background: #f0f0f0; 
     margin: 10px 0;
 }
 
-/* 🍹 Happy Hour Details Container - Mirrors .happy-hour-details */
+/* Happy Hour Details (Sleek Style Alignment) */
 .popup-happy-hour-detail {
-    font-size: 1em;
+    font-size: 0.95em;
     margin: 5px 0 0 0;
-    color: #BF3100; /* Deep Red-Brown */
+    color: #212529; 
     font-weight: 500;
     line-height: 1.4;
+    /* Added flex container for icon and text alignment */
+    display: flex;
+    align-items: flex-start;
 }
 
-/* The Day Title (e.g., "Monday Deal:") - Mirrors .deal-day */
-.popup-key {
-    font-weight: 700;
-    color: #BF3100; /* Deep Red-Brown */
-    white-space: normal; /* Allow text wrapping */
+/* Deal Icon Style */
+.popup-icon-flair {
+    color: #F5BB00; /* Bright Gold icon */
+    font-size: 1.1em;
+    margin-right: 8px;
+    flex-shrink: 0;
 }
 
-/* The actual deal value - Mirrors .happy-hour-details strong */
+/* Deal Text Value */
 .popup-value {
     color: #D76A03; /* Deep Orange for the deal text */
-    font-weight: 800;
+    font-weight: 700;
     word-wrap: break-word;
 }
 
 /* Link Style */
 .popup-content a {
-    color: #BF3100; /* Deep Red-Brown link on white background */
+    color: #BF3100; 
     font-weight: 600;
     text-decoration: none;
-    display: block; /* Make link a separate line */
+    display: block; 
     margin-top: 10px;
-    padding-top: 5px;
+    padding-top: 8px;
     border-top: 1px dashed #f0f0f0;
+    transition: color 0.2s;
+}
+
+.popup-content a:hover {
+    color: #D76A03;
 }

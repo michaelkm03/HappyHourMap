@@ -14,7 +14,7 @@ let placeDataMap = new Map();
 
 // --- Configuration Variables ---
 
-const MAIN_CSV_PATH = 'data/main.csv'; 
+const MAIN_CSV_PATH = 'main.csv';
 
 const LA_CENTER = [34.0522, -118.2437]; 
 const STARTING_ZOOM = 12; 

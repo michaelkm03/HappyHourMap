@@ -158,6 +158,18 @@ function createListingItem(place, index) {
     const currentDayDetail = place.happyHourData[currentDayKey] || 'N/A';
     // ---------------------------------------------------
 
+    // --- UPDATED: Conditionally render the map link with aligned styling ---
+    const googleMapLinkHtml = place.mapUri ? `
+        <p class="google-map-link-container">
+            <a href="${place.mapUri}" target="_blank" rel="noopener noreferrer" class="styled-map-link">
+                <span class="icon-flair fi fi-rr-link"></span> 
+                <strong>Google Maps Link</strong>
+            </a>
+        </p>
+    ` : '';
+    // ---------------------------------------------
+
+
     const item = document.createElement('div');
     item.className = 'listing-item';
     item.setAttribute('data-index', index);
@@ -176,14 +188,20 @@ function createListingItem(place, index) {
             <p class="happy-hour-details">
                 <span class="icon-flair fi fi-rr-cocktail"></span> 
                 <span class="deal-day">Today's Deal:</span> 
-                <strong class="deal-text">${currentDayDetail}</strong>
+                <strong>${currentDayDetail}</strong>
             </p>
+            ${googleMapLinkHtml}
         </div>
     `;
 
     // --- UPDATED CLICK HANDLER LOGIC FOR APPLYING HIGHLIGHTING AND CENTERING ---
-    item.addEventListener('click', () => {
+    item.addEventListener('click', (event) => {
         
+        // Prevent map centering if the link itself is clicked
+        if (event.target.closest('.styled-map-link')) {
+            return; 
+        }
+
         const filterDropdown = document.getElementById('neighborhood-filter');
         const currentFilter = filterDropdown ? filterDropdown.value : 'all';
         const clickedNeighborhood = place.neighborhood || 'all';
@@ -324,7 +342,7 @@ function filterPlaces(selectedNeighborhood) {
 
         // Re-apply highlight if the active place is still visible after filtering
         if (activePlace && activePlace.marker && activePlace.marker._icon && activeMarkers.includes(activePlace.marker)) {
-             
+            
             const iconElement = activePlace.marker._icon;
 
             // Re-apply the HIGHLIGHTED size/anchor
@@ -333,7 +351,7 @@ function filterPlaces(selectedNeighborhood) {
             activePlace.marker.setIcon(activePlace.marker.options.icon);
             
             // Re-apply the CSS class and star content
-             iconElement.classList.add('highlighted-marker');
+            iconElement.classList.add('highlighted-marker');
         }
 
         // 1. Calculate the centroid of the active markers (Used for filter change)
@@ -401,6 +419,7 @@ function setupNeighborhoodFilter(uniqueNeighborhoods) {
 
     container.appendChild(select);
 }
+
 
 // --- 4. DATA LOADING FUNCTION ---
 

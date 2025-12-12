@@ -1,13 +1,22 @@
 @import url('https://rsms.me/inter/inter.css');
 
-/* --- COLOR PALETTE ---
-    #BF3100: Deep Red-Brown (Primary Accent/Headers/Marker Fill)
-    #D76A03: Deep Orange (Secondary Accent/Deals/Hover Border)
-    #F5BB00: Bright Gold (Detail/Icon Highlight)
-    #212529: Dark Gray (General Text)
-*/
+/* ------------------------------------------- */
+/* 🎨 COLOR VARIABLES - OCEAN SUNSET THEME */
+/* ------------------------------------------- */
 
+:root {
+    /* OCEAN SUNSET (Red/Orange Focus) - Based on your preference */
+    --primary-accent: #bb3e03;      /* Deep Coral (Headers, Links, Map/Container Red Focus) */
+    --secondary-accent: #ee9b00;    /* Sunset Orange (Deals, Hover Borders, Subtle Warm Accent) */
+    --highlight-color: #bb3e03;     /* Hot Pink/Coral (Icon Flair, Active Pin - Maximum Pop) */
+    --text-color: #1F384B;          /* Midnight Navy (General Text, Cool Grounding) */
+    --link-hover: #ee9b00;          /* Sunset Orange */
+    --dropdown-arrow: #bb3e03;      /* Deep Coral */
+}
+
+/* ------------------------------------------- */
 /* --- 1. GLOBAL LAYOUT STYLES --- */
+/* ------------------------------------------- */
 
 body, html {
     margin: 0;
@@ -15,21 +24,23 @@ body, html {
     height: 100%;
     font-family: 'Inter', sans-serif;
     overflow: hidden;
-    color: #212529; /* Dark Gray for main body text */
+    color: var(--text-color); 
 }
 
+/* Standard H1 Header Style */
 h1 {
     margin: 0;
     padding: 12px 18px;
     font-size: 1.6em;
-    background: #BF3100; /* Deep Red-Brown */
+    background: var(--primary-accent); 
     color: white;
     font-weight: 900;
 }
 
 .map-container {
     display: flex;
-    height: calc(100vh - 50px); /* Adjust based on h1 height */
+    /* Adjusted height to account for 50px tall h1 header */
+    height: calc(100vh - 50px); 
 }
 
 #map {
@@ -37,14 +48,16 @@ h1 {
     height: 100%;
 }
 
+/* ------------------------------------------- */
 /* --- 2. SIDEBAR CONTAINER & FILTER STYLES --- */
+/* ------------------------------------------- */
 
 #listings {
-    width: 420px; /* Slightly narrower sidebar */
+    width: 420px;
     height: 100%;
     padding: 0; 
     box-shadow: -4px 0 10px rgba(0, 0, 0, 0.1);
-    background: #fcfcfc;
+    background: #FFF5F5; /* Light reddish tint for Sunset feel */
     display: flex;
     flex-direction: column;
 }
@@ -64,24 +77,26 @@ h1 {
     border-radius: 6px;
     font-size: 1em;
     font-weight: 500;
-    color: #BF3100;
+    color: var(--primary-accent);
     background-color: #fff;
-    /* Custom arrow for dropdown */
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23BF3100" d="M7 10l5 5 5-5z"/></svg>');
+    /* Custom arrow for dropdown - fill color updated to match --primary-accent */
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23bb3e03" d="M7 10l5 5 5-5z"/></svg>'); 
     background-repeat: no-repeat;
     background-position: right 15px center;
     background-size: 18px;
-    appearance: none; /* Remove default browser styling */
+    appearance: none;
     cursor: pointer;
     transition: border-color 0.2s;
 }
 
 .custom-filter-dropdown:focus {
     outline: none;
-    border-color: #D76A03;
+    border-color: var(--secondary-accent);
 }
 
-/* --- 3. LIST AND ITEM STYLES (SLEEK CARD DESIGN) --- */
+/* ------------------------------------------- */
+/* --- 3. LIST AND ITEM STYLES --- */
+/* ------------------------------------------- */
 
 #restaurant-list {
     list-style: none;
@@ -97,7 +112,7 @@ h1 {
     border-radius: 8px;
     cursor: pointer;
     background: white;
-    border: 1px solid #f0f0f0; /* Light border for definition */
+    border: 1px solid #f0f0f0;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); 
     transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
 }
@@ -105,13 +120,12 @@ h1 {
 .listing-item:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
-    border-color: #D76A03; /* Deep Orange on hover */
+    border-color: var(--secondary-accent);
 }
 
 .listing-item.active {
-    /* Sleek Active State: Distinct Border and Elevated Shadow */
     transform: translateY(-2px); 
-    border: 2px solid #BF3100; /* Primary Accent border */
+    border: 2px solid var(--primary-accent); 
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); 
     background-color: #fff;
 }
@@ -128,7 +142,7 @@ h1 {
     margin: 0 0 5px 0;
     font-size: 1.6em;
     font-weight: 800;
-    color: #BF3100; /* Deep Red-Brown */
+    color: var(--primary-accent);
 }
 
 /* 🏷️ Neighborhood Tag (Location text) */
@@ -139,7 +153,7 @@ h1 {
 }
 
 .neighborhood-tag {
-    color: #212529; /* Dark Gray for readability */
+    color: var(--text-color); 
     letter-spacing: 0.3px;
     display: flex;
     align-items: center;
@@ -149,7 +163,7 @@ h1 {
 .happy-hour-details {
     font-size: 0.95em;
     margin: 0;
-    color: #212529;
+    color: var(--text-color);
     font-weight: 500;
     line-height: 1.4;
     display: flex;
@@ -158,30 +172,60 @@ h1 {
 
 .deal-day {
     font-weight: 700;
-    color: #BF3100; /* Deep Red-Brown */
+    color: var(--primary-accent); 
     margin-right: 5px;
     white-space: nowrap;
 }
 
 /* The actual deal value (The `<strong>` tag) */
 .happy-hour-details strong {
-    color: #D76A03; /* Deep Orange for the deal text */
+    color: var(--secondary-accent); 
     font-weight: 700;
     word-wrap: break-word;
 }
 
 /* Deal Icon Style (Flaticon) */
 .icon-flair {
-    color: #F5BB00; /* Bright Gold icon */
+    color: var(--highlight-color); 
     font-size: 1.1em;
     margin-right: 8px;
     flex-shrink: 0;
 }
 
+/* 🔗 Google Maps Link Styles */
+
+.google-map-link-container {
+    margin-top: 8px; 
+    margin-bottom: 0;
+    padding-left: 0; 
+    font-size: 0.95em;
+}
+
+.styled-map-link {
+    text-decoration: none !important; 
+    color: var(--primary-accent); 
+    display: flex;
+    align-items: center; 
+    gap: 5px; 
+}
+
+.styled-map-link .icon-flair {
+    color: var(--primary-accent); 
+    font-size: 1.1em; 
+    margin-right: 0; 
+}
+
+.styled-map-link:hover {
+    color: var(--link-hover);
+    opacity: 1;
+}
+
+/* ------------------------------------------- */
 /* --- 4. CUSTOM MARKER ICON STYLES --- */
+/* ------------------------------------------- */
 
 .happy-house-map-marker {
-    background-color: #BF3100; /* Deep Red-Brown (Primary Accent) */
+    background-color: var(--primary-accent);
     color: white;
     width: 15px; 
     height: 15px;
@@ -197,7 +241,6 @@ h1 {
 
 /* Match the marker icon in the listing item for visual continuity */
 .happy-house-map-marker.listing-icon {
-    /* Smaller version used in the sidebar list item */
     width: 10px;
     height: 10px;
     line-height: 10px;
@@ -208,57 +251,50 @@ h1 {
 
 /* 1. Style for pins that are NOT in the active filter (Greyed Out) */
 .marker-inactive {
-    background-color: #aaaaaa !important; /* General Grey */
+    background-color: #aaaaaa !important;
     border-color: #f0f0f0 !important;
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
-    /* Make inactive pins slightly smaller and less opaque */
     transform: scale(0.8); 
     opacity: 0.7;
 }
 
-/* 2. Style for the currently selected/active pin (Yellow Highlight) */
+/* 2. Style for the currently selected/active pin (Highlight) */
 .highlighted-marker {
-    background-color: #F5BB00 !important; /* Bright Gold from palette */
-    /*border-color: #BF3100 !important;  Deep Red-Brown border */
-    /*box-shadow: 0 0 8px rgba(245, 187, 0, 0.9); /* Glowing effect */
-    transform: scale(1.4); /* Make it much bigger to stand out */
-    z-index: 1000 !important; /* Ensure it draws on top of everything */
+    background-color: var(--highlight-color) !important;
+    transform: scale(1.4);
+    z-index: 1000 !important;
     opacity: 1;
 }
 
-/* --- 5. POPUP STYLES (SLEEK ALIGNMENT) --- */
+/* ------------------------------------------- */
+/* --- 5. POPUP STYLES (Placeholder) --- */
+/* ------------------------------------------- */
 
-/* Wrapper: Controls the main box of the popup */
 .leaflet-popup-content-wrapper {
     background: white; 
-    color: #212529; 
-    border-radius: 8px; /* Sleeker rounded corners */
+    color: var(--text-color); 
+    border-radius: 8px;
     padding: 0; 
     font-family: 'Inter', sans-serif;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Elevated shadow */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-/* Tip: The pointer that connects the popup to the marker */
 .leaflet-popup-tip {
-    /* Set the tip background to white to match the wrapper */
     background: white; 
 }
 
-/* Inner Content: Padding and sizing for the text */
 .popup-content {
     padding: 15px 20px; 
     max-width: 300px; 
 }
 
-/* Restaurant Title */
 .popup-title {
     margin: 0 0 5px 0;
     font-size: 1.5em; 
     font-weight: 800;
-    color: #BF3100; /* Deep Red-Brown (Primary Accent) */
+    color: var(--primary-accent);
 }
 
-/* Divider: Use the sleek thin line */
 .popup-divider {
     border: 0;
     height: 1px;
@@ -266,36 +302,31 @@ h1 {
     margin: 10px 0;
 }
 
-/* Happy Hour Details (Sleek Style Alignment) */
 .popup-happy-hour-detail {
     font-size: 0.95em;
     margin: 5px 0 0 0;
-    color: #212529; 
+    color: var(--text-color); 
     font-weight: 500;
     line-height: 1.4;
-    /* Added flex container for icon and text alignment */
     display: flex;
     align-items: flex-start;
 }
 
-/* Deal Icon Style */
 .popup-icon-flair {
-    color: #F5BB00; /* Bright Gold icon */
+    color: var(--highlight-color);
     font-size: 1.1em;
     margin-right: 8px;
     flex-shrink: 0;
 }
 
-/* Deal Text Value */
 .popup-value {
-    color: #D76A03; /* Deep Orange for the deal text */
+    color: var(--secondary-accent);
     font-weight: 700;  
     word-wrap: break-word;
 }
 
-/* Link Style */
 .popup-content a {
-    color: #BF3100; 
+    color: var(--primary-accent); 
     font-weight: 600;
     text-decoration: none;
     display: block; 
@@ -306,5 +337,5 @@ h1 {
 }
 
 .popup-content a:hover {
-    color: #D76A03;
+    color: var(--secondary-accent);
 }

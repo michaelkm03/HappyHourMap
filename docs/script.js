@@ -553,7 +553,7 @@ async function initializeMapAndData() {
     map = L.map('map', { minZoom: 10 }).setView(LA_CENTER, STARTING_ZOOM);
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
         attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors © <a href="https://carto.com/attributions">CARTO</a>'
-    }).addTo(map);
+    }).addTo(map); 
     markersLayer.addTo(map);
 
     // Add map click handler for resetting the highlight

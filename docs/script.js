@@ -83,18 +83,14 @@ function isMobileDevice() {
  */
 function showMobileBlocker() {
     document.body.innerHTML = `
-        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; text-align: center; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; padding: 40px; background-color: #f8f9fa; color: #333;">
-            <div style="font-size: 80px; margin-bottom: 10px;">404</div>
-            <h1 style="font-size: 24px; margin-bottom: 15px;">Desktop Version Required</h1>
-            <p style="font-size: 16px; line-height: 1.5; max-width: 300px; color: #666;">
-                The Happy Hour Map is currently designed for desktop browsers to ensure the best map experience. 
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; text-align: center; background: #ffffff; font-family: -apple-system, system-ui, sans-serif; padding: 20px;">
+            <div style="font-size: 50px; margin-bottom: 20px;">🍸</div>
+            <h1 style="font-size: 24px; font-weight: 700; color: #1a1a1a; margin: 0;">Desktop Optimized</h1>
+            <p style="font-size: 15px; color: #666; margin-top: 10px; max-width: 250px; line-height: 1.4;">
+                This map is designed for larger screens. Mobile support is coming soon.
             </p>
-            <div style="margin-top: 30px; padding: 15px; border: 1px solid #ddd; border-radius: 8px; background: white;">
-                <p style="font-size: 14px; margin: 0;">Please visit us on a <strong>Laptop</strong> or <strong>Desktop</strong> computer.</p>
-            </div>
         </div>
     `;
-    // Prevent scrolling on the 404 page
     document.body.style.overflow = "hidden";
 }
 

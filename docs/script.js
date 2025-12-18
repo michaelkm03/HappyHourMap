@@ -83,14 +83,15 @@ function isMobileDevice() {
  */
 function showMobileBlocker() {
     document.body.innerHTML = `
-        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; text-align: center; background: #0f172a; color: #f8fafc; font-family: -apple-system, system-ui, sans-serif; padding: 20px;">
-            <div style="width: 60px; height: 2px; background: #38bdf8; margin-bottom: 20px;"></div>
-            <h1 style="font-size: 22px; letter-spacing: -0.5px; font-weight: 600;">DESKTOP ONLY</h1>
-            <p style="font-size: 14px; color: #94a3b8; margin-top: 8px; font-weight: 300; max-width: 220px; line-height: 1.5;">
-                Map navigation is not yet supported on mobile devices. 
-            </p>
-            <div style="margin-top: 40px; font-size: 11px; color: #38bdf8; text-transform: uppercase; letter-spacing: 2px;">
-                See you on a larger screen
+        <div style="display: flex; align-items: center; justify-content: center; height: 100vh; background: #f0f2f5; font-family: -apple-system, system-ui, sans-serif; padding: 30px;">
+            <div style="background: white; padding: 40px 20px; border-radius: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); text-align: center; width: 100%; max-width: 320px;">
+                <span style="display: inline-block; padding: 12px; background: #fff5f5; border-radius: 50%; margin-bottom: 15px;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ff4757" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                </span>
+                <h2 style="font-size: 20px; margin: 0; color: #2d3436;">Desktop Only</h2>
+                <p style="font-size: 14px; color: #636e72; margin-top: 12px; line-height: 1.6;">
+                    We're still fine-tuning the mobile experience. Please visit us on a computer for the full map.
+                </p>
             </div>
         </div>
     `;

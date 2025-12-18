@@ -357,3 +357,9 @@ h1 {
 .popup-content a:hover {
     color: var(--secondary-accent);
 }
+
+/* Mobile block styling */
+.mobile-blocked-body {
+    overflow: hidden;
+    background-color: #ffffff;
+}
